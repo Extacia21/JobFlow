@@ -1,0 +1,246 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Delete Job | JobFlow</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/jobflow.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="jobflow-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="jobflow-sidebar">
+
+        <div class="jobflow-logo">
+            Job<span>Flow</span>
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-title">
+                Workspace
+            </div>
+
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="sidebar-link"
+            >
+                <span class="sidebar-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">▣</span>
+                <span>Applications</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">◷</span>
+                <span>Interviews</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">↗</span>
+                <span>Analytics</span>
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">⚙</span>
+                <span>Settings</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="jobflow-main">
+
+
+        <div class="jobflow-topbar">
+
+            <div class="page-title">
+
+                <h1>
+                    Delete Job
+                </h1>
+
+                <p>
+                    Review this action before continuing.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            style="
+            max-width:600px;
+            margin:70px auto;
+            "
+        >
+
+
+            <div class="panel">
+
+
+                <div
+                    style="
+                    padding:40px;
+                    text-align:center;
+                    "
+                >
+
+
+                    <div
+                        style="
+                        width:70px;
+                        height:70px;
+                        margin:0 auto 20px;
+                        border-radius:50%;
+                        background:#fee2e2;
+                        color:#dc2626;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        font-size:30px;
+                        "
+                    >
+                        !
+                    </div>
+
+
+                    <h1
+                        style="
+                        font-size:22px;
+                        margin-bottom:8px;
+                        "
+                    >
+                        Delete this opportunity?
+                    </h1>
+
+
+                    <p
+                        style="
+                        color:#6b7280;
+                        font-size:13px;
+                        line-height:1.6;
+                        margin-bottom:25px;
+                        "
+                    >
+
+                        You're about to permanently delete
+
+                        <strong>
+                            {{ job.position }}
+                        </strong>
+
+                        at
+
+                        <strong>
+                            {{ job.company }}
+                        </strong>.
+
+                        This action cannot be undone.
+
+                    </p>
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <div
+                            style="
+                            display:flex;
+                            justify-content:center;
+                            gap:10px;
+                            "
+                        >
+
+
+                            <a
+                                href="{% url 'job_detail' job.id %}"
+                                class="btn btn-secondary"
+                            >
+                                Cancel
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn"
+                                style="
+                                background:#dc2626;
+                                color:white;
+                                "
+                            >
+                                Yes, Delete Job
+                            </button>
+
+
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<script
+    src="{% static 'js/jobflow.js' %}"
+></script>
+
+
+</body>
+
+</html>

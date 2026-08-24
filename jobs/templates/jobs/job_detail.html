@@ -1,0 +1,533 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ job.position }} | JobFlow</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/jobflow.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="jobflow-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="jobflow-sidebar">
+
+        <div class="jobflow-logo">
+            Job<span>Flow</span>
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-title">
+                Workspace
+            </div>
+
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="sidebar-link"
+            >
+                <span class="sidebar-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">▣</span>
+                <span>Applications</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">◷</span>
+                <span>Interviews</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">↗</span>
+                <span>Analytics</span>
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-title">
+                Management
+            </div>
+
+
+            <a
+                href="{% url 'add_job' %}"
+                class="sidebar-link"
+            >
+                <span class="sidebar-icon">＋</span>
+                <span>Add Job</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">★</span>
+                <span>Saved Jobs</span>
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">⚙</span>
+                <span>Settings</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">?</span>
+                <span>Help Center</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="jobflow-main">
+
+
+        <div class="jobflow-topbar">
+
+            <div class="page-title">
+
+                <h1>
+                    Job Details
+                </h1>
+
+                <p>
+                    Review and manage this opportunity.
+                </p>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <button class="icon-button">
+                    🔔
+                </button>
+
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        U
+                    </div>
+
+                    <div>
+
+                        <div class="profile-name">
+                            Job Seeker
+                        </div>
+
+                        <div class="profile-role">
+                            JobFlow User
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- JOB HEADER -->
+
+        <div
+            class="panel"
+            style="margin-bottom:20px;"
+        >
+
+            <div
+                style="
+                padding:28px;
+                display:flex;
+                justify-content:space-between;
+                align-items:flex-start;
+                gap:20px;
+                "
+            >
+
+
+                <div
+                    style="
+                    display:flex;
+                    gap:18px;
+                    align-items:center;
+                    "
+                >
+
+                    <div
+                        style="
+                        width:64px;
+                        height:64px;
+                        border-radius:16px;
+                        background:#eef2ff;
+                        color:#4f46e5;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        font-size:24px;
+                        font-weight:800;
+                        "
+                    >
+
+                        {{ job.company|first|upper }}
+
+                    </div>
+
+
+                    <div>
+
+                        <h1
+                            style="
+                            font-size:24px;
+                            margin-bottom:4px;
+                            "
+                        >
+
+                            {{ job.position }}
+
+                        </h1>
+
+
+                        <div
+                            style="
+                            color:#6b7280;
+                            font-size:14px;
+                            "
+                        >
+
+                            {{ job.company }}
+
+                            {% if job.location %}
+                                · {{ job.location }}
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <span class="status {{ job.status }}">
+
+                    {{ job.get_status_display }}
+
+                </span>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CONTENT GRID -->
+
+        <div
+            style="
+            display:grid;
+            grid-template-columns:2fr 1fr;
+            gap:20px;
+            "
+        >
+
+
+            <!-- INFORMATION -->
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Opportunity Information
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Key details about this position.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel-body">
+
+
+                    <div
+                        style="
+                        display:grid;
+                        grid-template-columns:1fr 1fr;
+                        gap:20px;
+                        "
+                    >
+
+
+                        <div>
+
+                            <div
+                                style="
+                                color:#9ca3af;
+                                font-size:10px;
+                                font-weight:700;
+                                text-transform:uppercase;
+                                margin-bottom:5px;
+                                "
+                            >
+                                Company
+                            </div>
+
+                            <div style="font-weight:600;">
+                                {{ job.company }}
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            <div
+                                style="
+                                color:#9ca3af;
+                                font-size:10px;
+                                font-weight:700;
+                                text-transform:uppercase;
+                                margin-bottom:5px;
+                                "
+                            >
+                                Location
+                            </div>
+
+                            <div style="font-weight:600;">
+                                {{ job.location|default:"Not specified" }}
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            <div
+                                style="
+                                color:#9ca3af;
+                                font-size:10px;
+                                font-weight:700;
+                                text-transform:uppercase;
+                                margin-bottom:5px;
+                                "
+                            >
+                                Salary
+                            </div>
+
+                            <div style="font-weight:600;">
+                                {{ job.salary|default:"Not specified" }}
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            <div
+                                style="
+                                color:#9ca3af;
+                                font-size:10px;
+                                font-weight:700;
+                                text-transform:uppercase;
+                                margin-bottom:5px;
+                                "
+                            >
+                                Date Applied
+                            </div>
+
+                            <div style="font-weight:600;">
+                                {{ job.date_applied|default:"Not applied yet" }}
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div
+                        style="
+                        margin-top:28px;
+                        padding-top:22px;
+                        border-top:1px solid #e5e7eb;
+                        "
+                    >
+
+                        <div
+                            style="
+                            color:#9ca3af;
+                            font-size:10px;
+                            font-weight:700;
+                            text-transform:uppercase;
+                            margin-bottom:8px;
+                            "
+                        >
+                            Notes
+                        </div>
+
+
+                        <div
+                            style="
+                            color:#4b5563;
+                            font-size:13px;
+                            line-height:1.7;
+                            "
+                        >
+
+                            {{ job.notes|default:"No notes have been added to this opportunity." }}
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ACTIONS -->
+
+            <div>
+
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+                            Actions
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel-body">
+
+
+                        <a
+                            href="{{ job.job_url }}"
+                            target="_blank"
+                            class="btn btn-primary"
+                            style="width:100%; margin-bottom:10px;"
+                        >
+                            ↗ View Job Posting
+                        </a>
+
+
+                        <a
+                            href="{% url 'edit_job' job.id %}"
+                            class="btn btn-secondary"
+                            style="width:100%; margin-bottom:10px;"
+                        >
+                            ✎ Edit Job
+                        </a>
+
+
+                        <a
+                            href="{% url 'delete_job' job.id %}"
+                            class="btn"
+                            style="
+                            width:100%;
+                            background:#fee2e2;
+                            color:#dc2626;
+                            "
+                        >
+                            × Delete Job
+                        </a>
+
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    style="
+                    margin-top:18px;
+                    background:#eef2ff;
+                    border-radius:12px;
+                    padding:18px;
+                    color:#4338ca;
+                    font-size:12px;
+                    line-height:1.6;
+                    "
+                >
+
+                    💡 <strong>JobFlow tip</strong>
+
+                    Keep this opportunity updated as it moves through
+                    your application pipeline.
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<script
+    src="{% static 'js/jobflow.js' %}"
+></script>
+
+
+</body>
+
+</html>

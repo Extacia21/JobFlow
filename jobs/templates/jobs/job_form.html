@@ -1,0 +1,399 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ page_title }} | JobFlow</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/jobflow.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="jobflow-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="jobflow-sidebar">
+
+        <div class="jobflow-logo">
+            Job<span>Flow</span>
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-title">
+                Workspace
+            </div>
+
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="sidebar-link"
+            >
+                <span class="sidebar-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">▣</span>
+                <span>Applications</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">◷</span>
+                <span>Interviews</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">↗</span>
+                <span>Analytics</span>
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-title">
+                Management
+            </div>
+
+
+            <a
+                href="{% url 'add_job' %}"
+                class="sidebar-link active"
+            >
+                <span class="sidebar-icon">＋</span>
+                <span>Add Job</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">★</span>
+                <span>Saved Jobs</span>
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">⚙</span>
+                <span>Settings</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <span class="sidebar-icon">?</span>
+                <span>Help Center</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="jobflow-main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="jobflow-topbar">
+
+            <div class="page-title">
+
+                <h1>
+                    {{ page_title }}
+                </h1>
+
+                <p>
+                    Add and manage opportunities in your job pipeline.
+                </p>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <button class="icon-button">
+                    🔔
+                </button>
+
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        U
+                    </div>
+
+                    <div>
+
+                        <div class="profile-name">
+                            Job Seeker
+                        </div>
+
+                        <div class="profile-role">
+                            JobFlow User
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FORM -->
+
+        <div
+            style="
+            max-width: 900px;
+            margin: 0 auto;
+            "
+        >
+
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Job Information
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Keep your opportunity details organized.
+                        </div>
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'dashboard' %}"
+                        class="btn btn-secondary"
+                    >
+                        ← Dashboard
+                    </a>
+
+                </div>
+
+
+                <div class="panel-body">
+
+
+                    {% if form.errors %}
+
+                    <div
+                        style="
+                        background:#fee2e2;
+                        color:#991b1b;
+                        padding:14px;
+                        border-radius:10px;
+                        margin-bottom:22px;
+                        font-size:13px;
+                        "
+                    >
+
+                        <strong>
+                            Please review the form.
+                        </strong>
+
+                        Some information needs to be corrected.
+
+                    </div>
+
+                    {% endif %}
+
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <div
+                            style="
+                            display:grid;
+                            grid-template-columns:1fr 1fr;
+                            gap:20px;
+                            "
+                        >
+
+
+                            {% for field in form %}
+
+                            <div
+                                style="
+                                {% if field.name == 'notes' %}
+                                grid-column:1 / -1;
+                                {% endif %}
+                                "
+                            >
+
+                                <label
+                                    for="{{ field.id_for_label }}"
+                                    style="
+                                    display:block;
+                                    font-size:12px;
+                                    font-weight:700;
+                                    margin-bottom:7px;
+                                    color:#374151;
+                                    "
+                                >
+
+                                    {{ field.label }}
+
+                                    {% if field.field.required %}
+                                        <span style="color:#dc2626;">
+                                            *
+                                        </span>
+                                    {% endif %}
+
+                                </label>
+
+
+                                {{ field }}
+
+
+                                {% if field.help_text %}
+
+                                <div
+                                    style="
+                                    color:#9ca3af;
+                                    font-size:11px;
+                                    margin-top:5px;
+                                    "
+                                >
+                                    {{ field.help_text }}
+                                </div>
+
+                                {% endif %}
+
+
+                                {% if field.errors %}
+
+                                <div
+                                    style="
+                                    color:#dc2626;
+                                    font-size:11px;
+                                    margin-top:5px;
+                                    "
+                                >
+                                    {{ field.errors }}
+                                </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            {% endfor %}
+
+
+                        </div>
+
+
+
+                        <div
+                            style="
+                            display:flex;
+                            justify-content:flex-end;
+                            gap:12px;
+                            margin-top:30px;
+                            padding-top:22px;
+                            border-top:1px solid #e5e7eb;
+                            "
+                        >
+
+                            <a
+                                href="{% url 'dashboard' %}"
+                                class="btn btn-secondary"
+                            >
+                                Cancel
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Save Job
+                            </button>
+
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- HELPFUL TIP -->
+
+            <div
+                style="
+                margin-top:18px;
+                padding:16px 18px;
+                background:#eef2ff;
+                border:1px solid #e0e7ff;
+                border-radius:12px;
+                color:#4338ca;
+                font-size:12px;
+                "
+            >
+
+                💡 <strong>JobFlow tip:</strong>
+                Keep your job URL and application status updated so
+                your dashboard accurately reflects your job search.
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<script
+    src="{% static 'js/jobflow.js' %}"
+></script>
+
+
+</body>
+
+</html>
