@@ -9,6 +9,11 @@ urlpatterns = [
         views.dashboard,
         name='dashboard'
     ),
+    path(
+        "applications/",
+        views.applications,
+        name="applications"
+    ),
 
     path(
         'jobs/add/',

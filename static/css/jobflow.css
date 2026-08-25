@@ -1069,3 +1069,420 @@ textarea {
     }
 
 }
+
+/* =========================================================
+   APPLICATIONS PAGE
+   ========================================================= */
+
+
+/* Search + Filter Toolbar */
+
+.application-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fafbfc;
+}
+
+
+/* Search */
+
+.search-box {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    font-size: 18px;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+
+.search-box input {
+    width: 100%;
+    height: 44px;
+    padding: 0 15px 0 42px;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    font-size: 14px;
+    color: #111827;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.search-box input:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* Status Filter */
+
+.status-filter {
+    height: 44px;
+
+    min-width: 170px;
+
+    padding: 0 38px 0 14px;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    font-size: 14px;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+
+.status-filter:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* Secondary Button */
+
+.btn-secondary {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    height: 42px;
+
+    padding: 0 16px;
+
+    border-radius: 9px;
+
+    border: 1px solid #dfe3e8;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.btn-secondary:hover {
+    background: #f8fafc;
+
+    border-color: #cbd5e1;
+
+    transform: translateY(-1px);
+}
+
+
+/* Company Link */
+
+.company-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+.company-link:hover .company-name {
+    color: #2563eb;
+}
+
+
+/* Muted text */
+
+.muted-text {
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+
+/* Table Action */
+
+.table-action {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 12px;
+
+    border-radius: 7px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.table-action:hover {
+    background: #dbeafe;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   APPLICATION STATUS COLORS
+   ========================================================= */
+
+.status.saved {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+
+.status.applied {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+.status.screening {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+
+.status.interview {
+    background: #ecfdf5;
+    color: #15803d;
+}
+
+
+.status.offer {
+    background: #f0fdfa;
+    color: #0f766e;
+}
+
+
+.status.rejected {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+/* =========================================================
+   APPLICATION TABLE ENHANCEMENTS
+   ========================================================= */
+
+.job-table tbody tr {
+    transition:
+        background 0.18s ease;
+}
+
+
+.job-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+
+.job-table th {
+    white-space: nowrap;
+}
+
+
+.job-table td {
+    vertical-align: middle;
+}
+
+
+/* =========================================================
+   RESPONSIVE APPLICATIONS TOOLBAR
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .application-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        width: 100%;
+        flex-basis: 100%;
+    }
+
+    .status-filter {
+        flex: 1;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .application-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box,
+    .status-filter,
+    .application-toolbar .btn {
+        width: 100%;
+    }
+
+}
+/* =========================================================
+   TABLE ACTIONS
+   ========================================================= */
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+
+.table-action.edit {
+    background: #f8fafc;
+    color: #475569;
+}
+
+
+.table-action.edit:hover {
+    background: #e2e8f0;
+}
+/* =========================================================
+   JOB FORM
+   ========================================================= */
+
+.form-panel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+
+.job-form {
+    padding: 24px;
+}
+
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 9px;
+
+    padding: 11px 13px;
+
+    background: #ffffff;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    color: #111827;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.form-group textarea {
+    resize: vertical;
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #e5e7eb;
+}
+
+
+@media (max-width: 700px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

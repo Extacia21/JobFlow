@@ -1,7 +1,6 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -13,7 +12,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>JobFlow | Dashboard</title>
+    <title>JobFlow | Applications</title>
 
     <link
         rel="stylesheet"
@@ -49,11 +48,9 @@
             </div>
 
 
-            <!-- DASHBOARD -->
-
             <a
                 href="{% url 'dashboard' %}"
-                class="sidebar-link active"
+                class="sidebar-link"
             >
 
                 <span class="sidebar-icon">
@@ -67,11 +64,9 @@
             </a>
 
 
-            <!-- APPLICATIONS -->
-
             <a
                 href="{% url 'applications' %}"
-                class="sidebar-link"
+                class="sidebar-link active"
             >
 
                 <span class="sidebar-icon">
@@ -84,8 +79,6 @@
 
             </a>
 
-
-            <!-- INTERVIEWS -->
 
             <a
                 href="#"
@@ -102,8 +95,6 @@
 
             </a>
 
-
-            <!-- ANALYTICS -->
 
             <a
                 href="#"
@@ -124,7 +115,6 @@
         </div>
 
 
-
         <!-- MANAGEMENT -->
 
         <div class="sidebar-section">
@@ -134,8 +124,6 @@
                 Management
             </div>
 
-
-            <!-- ADD JOB -->
 
             <a
                 href="{% url 'add_job' %}"
@@ -152,8 +140,6 @@
 
             </a>
 
-
-            <!-- SAVED JOBS -->
 
             <a
                 href="{% url 'applications' %}?status=saved"
@@ -173,9 +159,6 @@
 
         </div>
 
-
-
-        <!-- SIDEBAR BOTTOM -->
 
         <div class="sidebar-bottom">
 
@@ -220,7 +203,7 @@
 
 
     <!-- ==========================================
-         MAIN CONTENT
+         MAIN
          ========================================== -->
 
     <main class="jobflow-main">
@@ -236,12 +219,11 @@
             <div class="page-title">
 
                 <h1>
-                    Dashboard
+                    Applications
                 </h1>
 
                 <p>
-                    Your central workspace for tracking
-                    applications, interviews and career opportunities.
+                    Manage and track every opportunity in your job search.
                 </p>
 
             </div>
@@ -260,7 +242,6 @@
 
                 <div class="profile">
 
-
                     <div class="profile-avatar">
                         U
                     </div>
@@ -277,7 +258,6 @@
                         </div>
 
                     </div>
-
 
                 </div>
 
@@ -306,15 +286,12 @@
         <section class="stats-grid">
 
 
-            <!-- TOTAL -->
-
             <div class="stat-card">
-
 
                 <div class="stat-header">
 
                     <span class="stat-title">
-                        TOTAL APPLICATIONS
+                        TOTAL
                     </span>
 
                     <div class="stat-icon primary">
@@ -323,25 +300,45 @@
 
                 </div>
 
-
                 <div class="stat-number">
                     {{ total_jobs }}
                 </div>
 
-
                 <div class="stat-footer">
-                    All tracked opportunities
+                    All opportunities
                 </div>
-
 
             </div>
 
 
 
-            <!-- INTERVIEWS -->
-
             <div class="stat-card">
 
+                <div class="stat-header">
+
+                    <span class="stat-title">
+                        APPLIED
+                    </span>
+
+                    <div class="stat-icon primary">
+                        ↗
+                    </div>
+
+                </div>
+
+                <div class="stat-number">
+                    {{ applied_count }}
+                </div>
+
+                <div class="stat-footer">
+                    Applications submitted
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
 
                 <div class="stat-header">
 
@@ -355,57 +352,19 @@
 
                 </div>
 
-
                 <div class="stat-number">
-                    {{ interviews }}
+                    {{ interview_count }}
                 </div>
-
 
                 <div class="stat-footer">
-                    Active interview opportunities
+                    Active interviews
                 </div>
-
 
             </div>
 
 
 
-            <!-- REJECTED -->
-
             <div class="stat-card">
-
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        REJECTED
-                    </span>
-
-                    <div class="stat-icon danger">
-                        ×
-                    </div>
-
-                </div>
-
-
-                <div class="stat-number">
-                    {{ rejected }}
-                </div>
-
-
-                <div class="stat-footer">
-                    Opportunities not progressed
-                </div>
-
-
-            </div>
-
-
-
-            <!-- OFFERS -->
-
-            <div class="stat-card">
-
 
                 <div class="stat-header">
 
@@ -419,17 +378,14 @@
 
                 </div>
 
-
                 <div class="stat-number">
-                    {{ offers }}
+                    {{ offer_count }}
                 </div>
-
 
                 <div class="stat-footer">
                     Successful opportunities
                 </div>
 
-
             </div>
 
 
@@ -438,255 +394,7 @@
 
 
         <!-- ==========================================
-             DASHBOARD PANELS
-             ========================================== -->
-
-        <section class="dashboard-grid">
-
-
-            <!-- ======================================
-                 APPLICATION ACTIVITY
-                 ====================================== -->
-
-            <div class="panel">
-
-
-                <div class="panel-header">
-
-
-                    <div>
-
-                        <div class="panel-title">
-                            Application Activity
-                        </div>
-
-                        <div class="panel-subtitle">
-                            Monitor your application progress
-                        </div>
-
-                    </div>
-
-
-                    <span class="status applied">
-                        This Month
-                    </span>
-
-
-                </div>
-
-
-                <div class="chart-area">
-
-                    <div>
-
-                        <div style="
-                            text-align:center;
-                            font-size:32px;
-                            margin-bottom:8px;
-                        ">
-                            📊
-                        </div>
-
-                        <div>
-                            Analytics coming soon
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- ======================================
-                 APPLICATION PIPELINE
-                 ====================================== -->
-
-            <div class="panel">
-
-
-                <div class="panel-header">
-
-                    <div>
-
-                        <div class="panel-title">
-                            Application Pipeline
-                        </div>
-
-                        <div class="panel-subtitle">
-                            Current application status
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="panel-body">
-
-
-                    <!-- SAVED -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#d97706"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Saved
-                            </span>
-
-                        </div>
-
-                        <span class="pipeline-count">
-                            {{ saved }}
-                        </span>
-
-                    </div>
-
-
-
-                    <!-- APPLIED -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#2563eb"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Applied
-                            </span>
-
-                        </div>
-
-                        <span class="pipeline-count">
-                            {{ applied }}
-                        </span>
-
-                    </div>
-
-
-
-                    <!-- SCREENING -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#9333ea"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Screening
-                            </span>
-
-                        </div>
-
-                        <span class="pipeline-count">
-                            {{ screening }}
-                        </span>
-
-                    </div>
-
-
-
-                    <!-- INTERVIEW -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#16a34a"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Interview
-                            </span>
-
-                        </div>
-
-                        <span class="pipeline-count">
-                            {{ interviews }}
-                        </span>
-
-                    </div>
-
-
-
-                    <!-- OFFER -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#0f766e"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Offers
-                            </span>
-
-                        </div>
-
-                        <span class="pipeline-count">
-                            {{ offers }}
-                        </span>
-
-                    </div>
-
-
-
-                    <!-- REJECTED -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#dc2626"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Rejected
-                            </span>
-
-                        </div>
-
-                        <span class="pipeline-count">
-                            {{ rejected }}
-                        </span>
-
-                    </div>
-
-
-                </div>
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- ==========================================
-             RECENT APPLICATIONS
+             SEARCH + FILTER
              ========================================== -->
 
         <section class="table-panel">
@@ -698,50 +406,115 @@
                 <div>
 
                     <div class="panel-title">
-                        Recent Applications
+                        Job Applications
                     </div>
 
                     <div class="panel-subtitle">
-                        Your latest tracked opportunities
+                        Search, filter and manage your opportunities.
                     </div>
 
                 </div>
 
 
-                <div
-                    style="
-                    display:flex;
-                    gap:10px;
-                    "
+                <a
+                    href="{% url 'add_job' %}"
+                    class="btn btn-primary"
                 >
 
+                    ＋ Add Job
+
+                </a>
+
+
+            </div>
+
+
+
+            <!-- SEARCH -->
+
+            <form
+                method="GET"
+                class="application-toolbar"
+            >
+
+
+                <div class="search-box">
+
+                    <span class="search-icon">
+                        ⌕
+                    </span>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search_query }}"
+                        placeholder="Search company, position or location..."
+                    >
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <select
+                    name="status"
+                    class="status-filter"
+                >
+
+                    <option value="">
+                        All Statuses
+                    </option>
+
+
+                    {% for value, label in status_choices %}
+
+                        <option
+                            value="{{ value }}"
+                            {% if selected_status == value %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ label }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+
+                    Filter
+
+                </button>
+
+
+                {% if search_query or selected_status %}
 
                     <a
                         href="{% url 'applications' %}"
                         class="btn btn-secondary"
                     >
 
-                        View All
+                        Clear
 
                     </a>
 
-
-                    <a
-                        href="{% url 'add_job' %}"
-                        class="btn btn-primary"
-                    >
-
-                        ＋ Add Job
-
-                    </a>
+                {% endif %}
 
 
-                </div>
+            </form>
 
 
-            </div>
 
-
+            <!-- RESULTS -->
 
             {% if jobs %}
 
@@ -769,11 +542,19 @@
                         </th>
 
                         <th>
+                            Salary
+                        </th>
+
+                        <th>
                             Status
                         </th>
 
                         <th>
-                            Date
+                            Date Applied
+                        </th>
+
+                        <th>
+                            Action
                         </th>
 
                     </tr>
@@ -796,10 +577,7 @@
 
                             <a
                                 href="{% url 'job_detail' job.id %}"
-                                style="
-                                text-decoration:none;
-                                color:inherit;
-                                "
+                                class="company-link"
                             >
 
                                 <div class="company-name">
@@ -831,6 +609,25 @@
                         </td>
 
 
+                        <!-- SALARY -->
+
+                        <td>
+
+                            {% if job.salary %}
+
+                                {{ job.salary }}
+
+                            {% else %}
+
+                                <span class="muted-text">
+                                    Not specified
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
                         <!-- STATUS -->
 
                         <td>
@@ -856,13 +653,36 @@
 
                             {% else %}
 
-                                <span
-                                    style="color:#9ca3af;"
-                                >
-                                    Not applied
+                                <span class="muted-text">
+                                    —
                                 </span>
 
                             {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <td>
+
+                            <div class="table-actions">
+
+                                <a
+                                    href="{% url 'job_detail' job.id %}"
+                                    class="table-action"
+                                >
+                                    View
+                                </a>
+
+                                <a
+                                    href="{% url 'edit_job' job.id %}"
+                                    class="table-action edit"
+                                >
+                                    Edit
+                                </a>
+
+                            </div>
 
                         </td>
 
@@ -885,7 +705,7 @@
             {% else %}
 
 
-            <!-- EMPTY STATE -->
+            <!-- EMPTY -->
 
             <div class="empty-state">
 
@@ -896,27 +716,50 @@
 
 
                 <h3>
-                    No applications yet
+                    No applications found
                 </h3>
 
 
-                <p>
-                    Start building your job pipeline by
-                    adding your first opportunity.
-                </p>
+                {% if search_query or selected_status %}
+
+                    <p>
+                        Try changing your search or filter.
+                    </p>
 
 
-                <br>
+                    <br>
 
 
-                <a
-                    href="{% url 'add_job' %}"
-                    class="btn btn-primary"
-                >
+                    <a
+                        href="{% url 'applications' %}"
+                        class="btn btn-secondary"
+                    >
 
-                    ＋ Add Your First Job
+                        Clear Filters
 
-                </a>
+                    </a>
+
+                {% else %}
+
+                    <p>
+                        Start building your job pipeline
+                        by adding your first opportunity.
+                    </p>
+
+
+                    <br>
+
+
+                    <a
+                        href="{% url 'add_job' %}"
+                        class="btn btn-primary"
+                    >
+
+                        ＋ Add Your First Job
+
+                    </a>
+
+                {% endif %}
 
 
             </div>

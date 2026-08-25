@@ -1,0 +1,338 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>JobFlow | Edit Job</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/jobflow.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="jobflow-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="jobflow-sidebar">
+
+
+        <div class="jobflow-logo">
+            Job<span>Flow</span>
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-title">
+                Workspace
+            </div>
+
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ⌂
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'applications' %}"
+                class="sidebar-link active"
+            >
+
+                <span class="sidebar-icon">
+                    ▣
+                </span>
+
+                <span>
+                    Applications
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-title">
+                Management
+            </div>
+
+
+            <a
+                href="{% url 'add_job' %}"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ＋
+                </span>
+
+                <span>
+                    Add Job
+                </span>
+
+            </a>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="jobflow-main">
+
+
+        <div class="jobflow-topbar">
+
+            <div class="page-title">
+
+                <h1>
+                    Edit Job
+                </h1>
+
+                <p>
+                    Update your application information.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <section class="form-panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-title">
+                        Application Details
+                    </div>
+
+                    <div class="panel-subtitle">
+                        Keep your job information up to date.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="POST"
+                class="job-form"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Company
+                        </label>
+
+                        <input
+                            type="text"
+                            name="company"
+                            value="{{ job.company }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Position
+                        </label>
+
+                        <input
+                            type="text"
+                            name="position"
+                            value="{{ job.position }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Location
+                        </label>
+
+                        <input
+                            type="text"
+                            name="location"
+                            value="{{ job.location }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Salary
+                        </label>
+
+                        <input
+                            type="text"
+                            name="salary"
+                            value="{{ job.salary }}"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Job URL
+                        </label>
+
+                        <input
+                            type="url"
+                            name="job_url"
+                            value="{{ job.job_url }}"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Date Applied
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date_applied"
+                            value="{{ job.date_applied|date:'Y-m-d' }}"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Status
+                        </label>
+
+                        <select name="status">
+
+                            {% for value, label in status_choices %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if job.status == value %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ label }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Notes
+                    </label>
+
+                    <textarea
+                        name="notes"
+                        rows="6"
+                    >{{ job.notes }}</textarea>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <a
+                        href="{% url 'job_detail' job.id %}"
+                        class="btn btn-secondary"
+                    >
+                        Cancel
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Save Changes
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>
