@@ -5,14 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6797561a-b5ef-42dc-b187-67d3fe9ffd43" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/jobs/templates/jobs/applications.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jobs/templates/jobs/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jobs/templates/jobs/edit_job.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jobs/templates/jobs/partials/job_card.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jobs/templates/jobs/pipeline.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jobs/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jobs/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/jobflow.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/jobflow.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jobflow.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/jobflow.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,16 +41,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/dev/JobFlow"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/dev/JobFlow&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

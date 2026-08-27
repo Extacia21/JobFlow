@@ -1,0 +1,593 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>JobFlow | Pipeline</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/jobflow.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="jobflow-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="jobflow-sidebar">
+
+        <div class="jobflow-logo">
+            Job<span>Flow</span>
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-title">
+                Workspace
+            </div>
+
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ⌂
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'applications' %}"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ▣
+                </span>
+
+                <span>
+                    Applications
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'pipeline' %}"
+                class="sidebar-link active"
+            >
+
+                <span class="sidebar-icon">
+                    ◫
+                </span>
+
+                <span>
+                    Pipeline
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ◷
+                </span>
+
+                <span>
+                    Interviews
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ↗
+                </span>
+
+                <span>
+                    Analytics
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <div class="sidebar-title">
+                Management
+            </div>
+
+
+            <a
+                href="{% url 'add_job' %}"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ＋
+                </span>
+
+                <span>
+                    Add Job
+                </span>
+
+            </a>
+
+
+            <a
+                href="{% url 'applications' %}?status=saved"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ★
+                </span>
+
+                <span>
+                    Saved Jobs
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="jobflow-main">
+
+
+        <!-- HEADER -->
+
+        <div class="jobflow-topbar">
+
+
+            <div class="page-title">
+
+                <h1>
+                    Application Pipeline
+                </h1>
+
+                <p>
+                    Visualize and manage your entire job search.
+                </p>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <a
+                    href="{% url 'add_job' %}"
+                    class="btn btn-primary"
+                >
+
+                    ＋ Add Job
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- PIPELINE SUMMARY -->
+
+        <div class="pipeline-summary">
+
+            <div>
+
+                <strong>
+                    {{ total_jobs }}
+                </strong>
+
+                <span>
+                    Total Opportunities
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    {{ pipeline.interview|length }}
+                </strong>
+
+                <span>
+                    Interviews
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    {{ pipeline.offer|length }}
+                </strong>
+
+                <span>
+                    Offers
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- KANBAN -->
+
+        <section class="kanban-board">
+
+
+            <!-- SAVED -->
+
+            <div
+                class="kanban-column"
+                data-status="saved"
+            >
+
+                <div class="kanban-header">
+
+                    <div>
+
+                        <h3>
+                            Saved
+                        </h3>
+
+                        <span>
+                            Opportunities
+                        </span>
+
+                    </div>
+
+
+                    <span class="kanban-count">
+                        {{ pipeline.saved|length }}
+                    </span>
+
+                </div>
+
+
+                <div class="kanban-cards">
+
+
+                    {% for job in pipeline.saved %}
+
+                        {% include "jobs/partials/job_card.html" %}
+
+                    {% empty %}
+
+                        <div class="kanban-empty">
+                            No saved jobs
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- APPLIED -->
+
+            <div
+                class="kanban-column"
+                data-status="applied"
+            >
+
+                <div class="kanban-header">
+
+                    <div>
+
+                        <h3>
+                            Applied
+                        </h3>
+
+                        <span>
+                            Applications sent
+                        </span>
+
+                    </div>
+
+
+                    <span class="kanban-count">
+                        {{ pipeline.applied|length }}
+                    </span>
+
+                </div>
+
+
+                <div class="kanban-cards">
+
+                    {% for job in pipeline.applied %}
+
+                        {% include "jobs/partials/job_card.html" %}
+
+                    {% empty %}
+
+                        <div class="kanban-empty">
+                            No applications
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SCREENING -->
+
+            <div
+                class="kanban-column"
+                data-status="screening"
+            >
+
+                <div class="kanban-header">
+
+                    <div>
+
+                        <h3>
+                            Screening
+                        </h3>
+
+                        <span>
+                            Under review
+                        </span>
+
+                    </div>
+
+
+                    <span class="kanban-count">
+                        {{ pipeline.screening|length }}
+                    </span>
+
+                </div>
+
+
+                <div class="kanban-cards">
+
+                    {% for job in pipeline.screening %}
+
+                        {% include "jobs/partials/job_card.html" %}
+
+                    {% empty %}
+
+                        <div class="kanban-empty">
+                            No screenings
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- INTERVIEW -->
+
+            <div
+                class="kanban-column"
+                data-status="interview"
+            >
+
+                <div class="kanban-header">
+
+                    <div>
+
+                        <h3>
+                            Interview
+                        </h3>
+
+                        <span>
+                            Interview stage
+                        </span>
+
+                    </div>
+
+
+                    <span class="kanban-count">
+                        {{ pipeline.interview|length }}
+                    </span>
+
+                </div>
+
+
+                <div class="kanban-cards">
+
+                    {% for job in pipeline.interview %}
+
+                        {% include "jobs/partials/job_card.html" %}
+
+                    {% empty %}
+
+                        <div class="kanban-empty">
+                            No interviews
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- OFFER -->
+
+            <div
+                class="kanban-column"
+                data-status="offer"
+            >
+
+                <div class="kanban-header">
+
+                    <div>
+
+                        <h3>
+                            Offer
+                        </h3>
+
+                        <span>
+                            Offers received
+                        </span>
+
+                    </div>
+
+
+                    <span class="kanban-count">
+                        {{ pipeline.offer|length }}
+                    </span>
+
+                </div>
+
+
+                <div class="kanban-cards">
+
+                    {% for job in pipeline.offer %}
+
+                        {% include "jobs/partials/job_card.html" %}
+
+                    {% empty %}
+
+                        <div class="kanban-empty">
+                            No offers
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- REJECTED -->
+
+            <div
+                class="kanban-column"
+                data-status="rejected"
+            >
+
+                <div class="kanban-header">
+
+                    <div>
+
+                        <h3>
+                            Rejected
+                        </h3>
+
+                        <span>
+                            Closed opportunities
+                        </span>
+
+                    </div>
+
+
+                    <span class="kanban-count">
+                        {{ pipeline.rejected|length }}
+                    </span>
+
+                </div>
+
+
+                <div class="kanban-cards">
+
+                    {% for job in pipeline.rejected %}
+
+                        {% include "jobs/partials/job_card.html" %}
+
+                    {% empty %}
+
+                        <div class="kanban-empty">
+                            No rejected jobs
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script src="{% static 'js/jobflow.js' %}"></script>
+
+</body>
+
+</html>

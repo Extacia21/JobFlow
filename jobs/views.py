@@ -203,3 +203,36 @@ def applications(request):
         context
     )
 
+
+def pipeline(request):
+
+    jobs = Job.objects.all().order_by("-created_at")
+
+    pipeline = {
+        "saved": [],
+        "applied": [],
+        "screening": [],
+        "interview": [],
+        "offer": [],
+        "rejected": [],
+    }
+
+
+    for job in jobs:
+
+        if job.status in pipeline:
+
+            pipeline[job.status].append(job)
+
+
+    context = {
+        "pipeline": pipeline,
+        "total_jobs": jobs.count(),
+    }
+
+
+    return render(
+        request,
+        "jobs/pipeline.html",
+        context
+    )

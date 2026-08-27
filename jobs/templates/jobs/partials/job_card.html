@@ -1,0 +1,78 @@
+<div
+    class="kanban-card"
+    draggable="true"
+    data-job-id="{{ job.id }}"
+>
+
+
+    <div class="kanban-card-top">
+
+        <div class="company-avatar">
+            {{ job.company|first|upper }}
+        </div>
+
+
+        <span class="card-menu">
+            •••
+        </span>
+
+    </div>
+
+
+    <a
+        href="{% url 'job_detail' job.id %}"
+        class="kanban-job-title"
+    >
+
+        {{ job.position }}
+
+    </a>
+
+
+    <div class="kanban-company">
+
+        {{ job.company }}
+
+    </div>
+
+
+    <div class="kanban-location">
+
+        <span>
+            ◉
+        </span>
+
+        {{ job.location }}
+
+    </div>
+
+
+    {% if job.salary %}
+
+        <div class="kanban-salary">
+
+            {{ job.salary }}
+
+        </div>
+
+    {% endif %}
+
+
+    <div class="kanban-card-footer">
+
+        <span>
+            {{ job.created_at|date:"M d" }}
+        </span>
+
+
+        <a
+            href="{% url 'edit_job' job.id %}"
+            class="card-edit"
+        >
+            Edit
+        </a>
+
+    </div>
+
+
+</div>
