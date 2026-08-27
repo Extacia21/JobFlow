@@ -1,4 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.db.models import Count, Q
+
 from .models import Job
 from .forms import JobForm
 from django.db.models import Q
@@ -206,33 +209,141 @@ def applications(request):
 
 def pipeline(request):
 
-    jobs = Job.objects.all().order_by("-created_at")
+    jobs = Job.objects.all()
+
 
     pipeline = {
-        "saved": [],
-        "applied": [],
-        "screening": [],
-        "interview": [],
-        "offer": [],
-        "rejected": [],
+
+        "saved":
+            jobs.filter(
+                status="saved"
+            ),
+
+        "applied":
+            jobs.filter(
+                status="applied"
+            ),
+
+        "screening":
+            jobs.filter(
+                status="screening"
+            ),
+
+        "interview":
+            jobs.filter(
+                status="interview"
+            ),
+
+        "offer":
+            jobs.filter(
+                status="offer"
+            ),
+
+        "rejected":
+            jobs.filter(
+                status="rejected"
+            ),
+
     }
 
 
-    for job in jobs:
-
-        if job.status in pipeline:
-
-            pipeline[job.status].append(job)
+    total_jobs = jobs.count()
 
 
-    context = {
-        "pipeline": pipeline,
-        "total_jobs": jobs.count(),
-    }
+    interview_count = jobs.filter(
+        status="interview"
+    ).count()
+
+
+    offer_count = jobs.filter(
+        status="offer"
+    ).count()
+
+
+    active_jobs = jobs.exclude(
+        status__in=[
+            "offer",
+            "rejected"
+        ]
+    ).count()
+
+
+    if total_jobs:
+
+        interview_rate = round(
+            (
+                interview_count /
+                total_jobs
+            ) * 100,
+            1
+        )
+
+
+        offer_rate = round(
+            (
+                offer_count /
+                total_jobs
+            ) * 100,
+            1
+        )
+
+    else:
+
+        interview_rate = 0
+
+        offer_rate = 0
 
 
     return render(
         request,
         "jobs/pipeline.html",
-        context
+        {
+            "pipeline": pipeline,
+
+            "total_jobs":
+                total_jobs,
+
+            "interview_rate":
+                interview_rate,
+
+            "offer_rate":
+                offer_rate,
+
+            "active_jobs":
+                active_jobs,
+        }
     )
+
+
+@require_POST
+def update_job_status(request, job_id):
+
+    job = get_object_or_404(
+        Job,
+        id=job_id
+    )
+
+    new_status = request.POST.get("status")
+
+    valid_statuses = dict(Job.STATUS_CHOICES)
+
+    if new_status not in valid_statuses:
+        return JsonResponse(
+            {
+                "success": False,
+                "error": "Invalid status."
+            },
+            status=400
+        )
+
+    job.status = new_status
+    job.save(update_fields=["status"])
+
+    return JsonResponse(
+        {
+            "success": True,
+            "status": job.status,
+            "status_label": valid_statuses[new_status]
+        }
+    )
+

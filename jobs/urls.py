@@ -32,6 +32,13 @@ urlpatterns = [
         views.edit_job,
         name='edit_job'
     ),
+
+    path(
+        "jobs/<int:job_id>/status/",
+        views.update_job_status,
+        name="update_job_status"
+    ),
+
     path(
         "pipeline/",
         views.pipeline,

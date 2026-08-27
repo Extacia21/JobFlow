@@ -1838,3 +1838,842 @@ textarea {
     }
 
 }
+/* =========================================================
+   KANBAN JOB CARDS
+   ========================================================= */
+
+.kanban-board {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(280px, 1fr));
+
+    gap: 18px;
+
+    align-items: start;
+
+    overflow-x: auto;
+
+    padding-bottom: 15px;
+
+}
+
+
+.kanban-column {
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 14px;
+
+    min-height: 360px;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+.kanban-column:hover {
+
+    border-color: #dbe1ea;
+
+}
+
+
+.kanban-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 4px 3px 13px;
+
+    margin-bottom: 12px;
+
+    border-bottom:
+        1px solid #e5e7eb;
+
+}
+
+
+.kanban-header h3 {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    font-weight: 750;
+
+    color: #111827;
+
+}
+
+
+.kanban-header span:not(.kanban-count) {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 10px;
+
+    color: #94a3b8;
+
+}
+
+
+.kanban-count {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 26px;
+
+    height: 26px;
+
+    padding: 0 7px;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    color: #475569;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+}
+
+
+.kanban-cards {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    min-height: 280px;
+
+    padding: 2px;
+
+    border-radius: 10px;
+
+    transition:
+        background .2s ease,
+        outline .2s ease;
+
+}
+
+
+.kanban-cards.drag-over {
+
+    background:
+        rgba(79, 70, 229, .045);
+
+    outline:
+        2px dashed
+        rgba(79, 70, 229, .22);
+
+    outline-offset: -2px;
+
+}
+
+
+/* =========================================================
+   JOB CARD
+   ========================================================= */
+
+.job-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 11px;
+
+    padding: 13px;
+
+    cursor: grab;
+
+    user-select: none;
+
+    box-shadow:
+        0 1px 2px rgba(15, 23, 42, .03);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease,
+        opacity .2s ease;
+
+}
+
+
+.job-card:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        #cbd5e1;
+
+    box-shadow:
+        0 8px 22px
+        rgba(15, 23, 42, .07);
+
+}
+
+
+.job-card:active {
+
+    cursor: grabbing;
+
+}
+
+
+.job-card.is-dragging {
+
+    opacity: .45;
+
+    transform:
+        rotate(1.5deg)
+        scale(1.02);
+
+}
+
+
+.job-card-top {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.job-card-company {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.job-company-name {
+
+    color: #111827;
+
+    font-size: 13px;
+
+    font-weight: 750;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.job-position {
+
+    margin-top: 3px;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.job-card-menu {
+
+    border: none;
+
+    background: transparent;
+
+    color: #94a3b8;
+
+    font-size: 18px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    padding: 4px;
+
+}
+
+
+.job-card-menu:hover {
+
+    color: #334155;
+
+}
+
+
+.job-card-details {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 13px;
+
+}
+
+
+.job-detail {
+
+    padding: 4px 7px;
+
+    border-radius: 6px;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-size: 9px;
+
+}
+
+
+.job-card-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-top: 12px;
+
+    padding-top: 10px;
+
+    border-top:
+        1px solid #f1f5f9;
+
+}
+
+
+.job-date {
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+}
+
+
+.job-view-link {
+
+    color: #4f46e5;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+}
+
+
+.job-view-link:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* =========================================================
+   EMPTY COLUMN
+   ========================================================= */
+
+.kanban-empty {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 100px;
+
+    border:
+        1px dashed #d5dbe3;
+
+    border-radius: 10px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .kanban-board {
+
+        grid-template-columns:
+            repeat(2, minmax(280px, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .kanban-board {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+/* =========================================================
+   PIPELINE INTELLIGENCE
+   ========================================================= */
+
+.pipeline-intelligence {
+
+    margin-bottom: 22px;
+
+}
+
+
+.intelligence-header {
+
+    margin-bottom: 16px;
+
+}
+
+
+.eyebrow {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #6366f1;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .12em;
+
+}
+
+
+.intelligence-header h2 {
+
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+}
+
+
+.intelligence-header p {
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+}
+
+
+.intelligence-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 13px;
+
+}
+
+
+.intelligence-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 16px;
+
+    background: #ffffff;
+
+    border:
+        1px solid #e8edf3;
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 3px 12px
+        rgba(15, 23, 42, .025);
+
+}
+
+
+.intelligence-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 11px;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+
+.intelligence-icon.blue {
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+
+}
+
+
+.intelligence-icon.purple {
+
+    background: #f5f3ff;
+
+    color: #7c3aed;
+
+}
+
+
+.intelligence-icon.green {
+
+    background: #ecfdf5;
+
+    color: #059669;
+
+}
+
+
+.intelligence-icon.orange {
+
+    background: #fff7ed;
+
+    color: #ea580c;
+
+}
+
+
+.intelligence-label {
+
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: .08em;
+
+}
+
+
+.intelligence-card strong {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #111827;
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+}
+
+
+.intelligence-card small {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+}
+/* =========================================================
+   PIPELINE TOOLBAR
+   ========================================================= */
+
+.pipeline-toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+
+    padding: 10px;
+
+    background: #ffffff;
+
+    border:
+        1px solid #e8edf3;
+
+    border-radius: 12px;
+
+}
+
+
+.pipeline-search {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    width: 280px;
+
+    padding: 8px 11px;
+
+    background: #f8fafc;
+
+    border:
+        1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+}
+
+
+.pipeline-search span {
+
+    color: #94a3b8;
+
+    font-size: 17px;
+
+}
+
+
+.pipeline-search input {
+
+    width: 100%;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #334155;
+
+    font-size: 11px;
+
+}
+
+
+.pipeline-search input::placeholder {
+
+    color: #a1a9b5;
+
+}
+
+
+.pipeline-filters {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    overflow-x: auto;
+
+}
+
+
+.pipeline-filter {
+
+    border: none;
+
+    background: transparent;
+
+    padding: 7px 11px;
+
+    border-radius: 7px;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition: .2s ease;
+
+}
+
+
+.pipeline-filter:hover {
+
+    background: #f1f5f9;
+
+    color: #334155;
+
+}
+
+
+.pipeline-filter.active {
+
+    background: #111827;
+
+    color: #ffffff;
+
+}
+
+
+.pipeline-refresh {
+
+    width: 36px;
+
+    height: 36px;
+
+    border:
+        1px solid #e5e7eb;
+
+    background: #ffffff;
+
+    border-radius: 9px;
+
+    color: #64748b;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    transition: .2s ease;
+
+}
+
+
+.pipeline-refresh:hover {
+
+    color: #4f46e5;
+
+    border-color: #c7d2fe;
+
+    transform: rotate(45deg);
+
+}
+@media (max-width: 1000px) {
+
+    .intelligence-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .pipeline-toolbar {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+
+    .pipeline-search {
+
+        width: auto;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .intelligence-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .intelligence-card {
+
+        padding: 13px;
+
+    }
+
+}

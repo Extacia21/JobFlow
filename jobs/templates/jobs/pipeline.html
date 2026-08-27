@@ -216,13 +216,20 @@
 
             <div class="topbar-actions">
 
+                <button
+                    type="button"
+                    class="pipeline-refresh"
+                    onclick="window.location.reload()"
+                    title="Refresh pipeline"
+                >
+                    ↻
+                </button>
+
                 <a
                     href="{% url 'add_job' %}"
                     class="btn btn-primary"
                 >
-
                     ＋ Add Job
-
                 </a>
 
             </div>
@@ -234,43 +241,201 @@
 
         <!-- PIPELINE SUMMARY -->
 
-        <div class="pipeline-summary">
+        <section class="pipeline-intelligence">
 
-            <div>
+            <div class="intelligence-header">
 
-                <strong>
-                    {{ total_jobs }}
-                </strong>
+                <div>
 
-                <span>
-                    Total Opportunities
-                </span>
+                    <span class="eyebrow">
+                        JOB SEARCH INTELLIGENCE
+                    </span>
 
-            </div>
+                    <h2>
+                        Your application performance
+                    </h2>
 
+                    <p>
+                        Understand how opportunities are moving
+                        through your pipeline.
+                    </p>
 
-            <div>
-
-                <strong>
-                    {{ pipeline.interview|length }}
-                </strong>
-
-                <span>
-                    Interviews
-                </span>
+                </div>
 
             </div>
 
 
-            <div>
+            <div class="intelligence-grid">
 
-                <strong>
-                    {{ pipeline.offer|length }}
-                </strong>
+
+                <div class="intelligence-card">
+
+                    <div class="intelligence-icon blue">
+                        ◎
+                    </div>
+
+                    <div>
+
+                        <span class="intelligence-label">
+                            TOTAL
+                        </span>
+
+                        <strong>
+                            {{ total_jobs }}
+                        </strong>
+
+                        <small>
+                            Opportunities tracked
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="intelligence-card">
+
+                    <div class="intelligence-icon purple">
+                        ◷
+                    </div>
+
+                    <div>
+
+                        <span class="intelligence-label">
+                            INTERVIEW RATE
+                        </span>
+
+                        <strong>
+                            {{ interview_rate }}%
+                        </strong>
+
+                        <small>
+                            Applications reaching interview
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="intelligence-card">
+
+                    <div class="intelligence-icon green">
+                        ★
+                    </div>
+
+                    <div>
+
+                        <span class="intelligence-label">
+                            OFFER RATE
+                        </span>
+
+                        <strong>
+                            {{ offer_rate }}%
+                        </strong>
+
+                        <small>
+                            Applications reaching offer
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="intelligence-card">
+
+                    <div class="intelligence-icon orange">
+                        ↗
+                    </div>
+
+                    <div>
+
+                        <span class="intelligence-label">
+                            ACTIVE
+                        </span>
+
+                        <strong>
+                            {{ active_jobs }}
+                        </strong>
+
+                        <small>
+                            Applications still progressing
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+        <div class="pipeline-toolbar">
+
+            <div class="pipeline-search">
 
                 <span>
+                    ⌕
+                </span>
+
+                <input
+                    type="text"
+                    id="pipelineSearch"
+                    placeholder="Search company or position..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="pipeline-filters">
+
+                <button
+                    class="pipeline-filter active"
+                    data-filter="all"
+                >
+                    All
+                </button>
+
+                <button
+                    class="pipeline-filter"
+                    data-filter="saved"
+                >
+                    Saved
+                </button>
+
+                <button
+                    class="pipeline-filter"
+                    data-filter="applied"
+                >
+                    Applied
+                </button>
+
+                <button
+                    class="pipeline-filter"
+                    data-filter="screening"
+                >
+                    Screening
+                </button>
+
+                <button
+                    class="pipeline-filter"
+                    data-filter="interview"
+                >
+                    Interview
+                </button>
+
+                <button
+                    class="pipeline-filter"
+                    data-filter="offer"
+                >
                     Offers
-                </span>
+                </button>
 
             </div>
 
@@ -312,7 +477,10 @@
                 </div>
 
 
-                <div class="kanban-cards">
+                <div
+                    class="kanban-cards"
+                    data-status="saved"
+                >
 
 
                     {% for job in pipeline.saved %}
@@ -363,7 +531,10 @@
                 </div>
 
 
-                <div class="kanban-cards">
+                <div
+                    class="kanban-cards"
+                    data-status="applied"
+                >
 
                     {% for job in pipeline.applied %}
 
@@ -412,7 +583,10 @@
                 </div>
 
 
-                <div class="kanban-cards">
+                <div
+                    class="kanban-cards"
+                    data-status="screening"
+                >
 
                     {% for job in pipeline.screening %}
 
@@ -461,7 +635,10 @@
                 </div>
 
 
-                <div class="kanban-cards">
+                <div
+                    class="kanban-cards"
+                    data-status="interview"
+                >
 
                     {% for job in pipeline.interview %}
 
@@ -510,7 +687,10 @@
                 </div>
 
 
-                <div class="kanban-cards">
+                <div
+                    class="kanban-cards"
+                    data-status="offer"
+                >
 
                     {% for job in pipeline.offer %}
 
@@ -559,7 +739,10 @@
                 </div>
 
 
-                <div class="kanban-cards">
+                <div
+                    class="kanban-cards"
+                    data-status="rejected"
+                >
 
                     {% for job in pipeline.rejected %}
 
