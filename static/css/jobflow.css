@@ -2677,3 +2677,342 @@ textarea {
     }
 
 }
+/* =========================================================
+   APPLICATION FUNNEL
+   ========================================================= */
+
+.application-funnel {
+
+    margin-bottom: 22px;
+
+    padding: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8edf3;
+
+    border-radius: 14px;
+
+}
+
+
+.funnel-header {
+
+    margin-bottom: 20px;
+
+}
+
+
+.funnel-header h2 {
+
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+}
+
+
+.funnel {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+}
+
+
+.funnel-stage {
+
+    flex: 1;
+
+    text-align: center;
+
+    padding: 17px 10px;
+
+    background: #f8fafc;
+
+    border: 1px solid #edf1f5;
+
+    border-radius: 11px;
+
+}
+
+
+.funnel-stage.success {
+
+    background: #f0fdf4;
+
+    border-color: #dcfce7;
+
+}
+
+
+.funnel-number {
+
+    color: #111827;
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+}
+
+
+.funnel-label {
+
+    margin-top: 4px;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+}
+
+
+.funnel-arrow {
+
+    color: #cbd5e1;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+/* =========================================================
+   DASHBOARD ACTIVITY
+   ========================================================= */
+
+.dashboard-activity {
+
+    padding: 5px 0;
+
+}
+
+
+.activity-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+
+}
+
+
+.activity-summary div {
+
+    padding: 12px;
+
+    background: #f8fafc;
+
+    border-radius: 9px;
+
+}
+
+
+.activity-summary strong {
+
+    display: block;
+
+    color: #111827;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+}
+
+
+.activity-summary span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+}
+
+
+.progress-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+
+}
+
+
+.progress-header span {
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+}
+
+
+.progress-header strong {
+
+    color: #4f46e5;
+
+    font-size: 11px;
+
+}
+
+
+.progress-track {
+
+    height: 8px;
+
+    overflow: hidden;
+
+    background: #eef2f7;
+
+    border-radius: 99px;
+
+}
+
+
+.progress-fill {
+
+    height: 100%;
+
+    background: #4f46e5;
+
+    border-radius: inherit;
+
+    transition: width .8s ease;
+
+}
+
+
+.activity-progress p {
+
+    margin: 8px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+}
+.quick-add-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f8fafc
+        );
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 13px;
+
+}
+
+
+.quick-add-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+
+    font-size: 20px;
+
+}
+
+
+.quick-add-card h3 {
+
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 13px;
+
+}
+
+
+.quick-add-card p {
+
+    margin: 4px 0 0;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+}
+
+
+.quick-add-card .btn {
+
+    margin-left: auto;
+
+}
+
+
+@media (max-width: 650px) {
+
+    .quick-add-card {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .quick-add-card .btn {
+
+        margin-left: 0;
+
+    }
+
+}

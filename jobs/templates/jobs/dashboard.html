@@ -88,7 +88,7 @@
             <!-- INTERVIEWS -->
 
             <a
-                href="#"
+                href="{% url 'applications' %}?status=interview"
                 class="sidebar-link"
             >
 
@@ -106,7 +106,7 @@
             <!-- ANALYTICS -->
 
             <a
-                href="#"
+                href="{% url 'pipeline' %}"
                 class="sidebar-link"
             >
 
@@ -509,7 +509,97 @@
                         </div>
 
                         <div>
-                            Analytics coming soon
+                            <div class="dashboard-activity">
+
+                                <div class="activity-summary">
+
+                                    <div>
+
+                                        <strong>
+                                            {{ total_jobs }}
+                                        </strong>
+
+                                        <span>
+                                            Total tracked
+                                        </span>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            {{ applied }}
+                                        </strong>
+
+                                        <span>
+                                            Applications sent
+                                        </span>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            {{ interviews }}
+                                        </strong>
+
+                                        <span>
+                                            Interviews
+                                        </span>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            {{ offers }}
+                                        </strong>
+
+                                        <span>
+                                            Offers
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="activity-progress">
+
+                                    <div class="progress-header">
+
+                                        <span>
+                                            Application progress
+                                        </span>
+
+                                        <strong>
+                                            {{ interview_rate }}%
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="progress-track">
+
+                                        <div
+                                            class="progress-fill"
+                                            style="width: {{ interview_rate }}%;"
+                                        ></div>
+
+                                    </div>
+
+
+                                    <p>
+                                        Percentage of tracked opportunities
+                                        that reached the interview stage.
+                                    </p>
+
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>
@@ -947,6 +1037,33 @@
 
 
         </section>
+        <div class="quick-add-card">
+
+            <div class="quick-add-icon">
+                ＋
+            </div>
+
+            <div>
+
+                <h3>
+                    Keep your pipeline moving
+                </h3>
+
+                <p>
+                    Add every opportunity you discover so
+                    nothing gets lost during your job search.
+                </p>
+
+            </div>
+
+            <a
+                href="{% url 'add_job' %}"
+                class="btn btn-primary"
+            >
+                Add Opportunity
+            </a>
+
+        </div>
 
 
     </main>

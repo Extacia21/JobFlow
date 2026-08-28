@@ -211,53 +211,54 @@ def pipeline(request):
 
     jobs = Job.objects.all()
 
-
-    pipeline = {
-
-        "saved":
-            jobs.filter(
-                status="saved"
-            ),
-
-        "applied":
-            jobs.filter(
-                status="applied"
-            ),
-
-        "screening":
-            jobs.filter(
-                status="screening"
-            ),
-
-        "interview":
-            jobs.filter(
-                status="interview"
-            ),
-
-        "offer":
-            jobs.filter(
-                status="offer"
-            ),
-
-        "rejected":
-            jobs.filter(
-                status="rejected"
-            ),
-
-    }
-
-
     total_jobs = jobs.count()
 
+    saved_count = jobs.filter(
+        status="saved"
+    ).count()
+
+    applied_count = jobs.filter(
+        status="applied"
+    ).count()
+
+    screening_count = jobs.filter(
+        status="screening"
+    ).count()
 
     interview_count = jobs.filter(
         status="interview"
     ).count()
 
-
     offer_count = jobs.filter(
         status="offer"
     ).count()
+
+    rejected_count = jobs.filter(
+        status="rejected"
+    ).count()
+
+
+    pipeline_data = {
+
+        "saved":
+            jobs.filter(status="saved"),
+
+        "applied":
+            jobs.filter(status="applied"),
+
+        "screening":
+            jobs.filter(status="screening"),
+
+        "interview":
+            jobs.filter(status="interview"),
+
+        "offer":
+            jobs.filter(status="offer"),
+
+        "rejected":
+            jobs.filter(status="rejected"),
+
+    }
 
 
     active_jobs = jobs.exclude(
@@ -268,40 +269,53 @@ def pipeline(request):
     ).count()
 
 
-    if total_jobs:
-
-        interview_rate = round(
-            (
-                interview_count /
-                total_jobs
-            ) * 100,
-            1
-        )
+    interview_rate = calculate_percentage(
+        interview_count,
+        total_jobs
+    )
 
 
-        offer_rate = round(
-            (
-                offer_count /
-                total_jobs
-            ) * 100,
-            1
-        )
+    offer_rate = calculate_percentage(
+        offer_count,
+        total_jobs
+    )
 
-    else:
 
-        interview_rate = 0
-
-        offer_rate = 0
+    success_rate = calculate_percentage(
+        offer_count,
+        total_jobs
+    )
 
 
     return render(
         request,
         "jobs/pipeline.html",
         {
-            "pipeline": pipeline,
+            "pipeline": pipeline_data,
 
             "total_jobs":
                 total_jobs,
+
+            "saved_count":
+                saved_count,
+
+            "applied_count":
+                applied_count,
+
+            "screening_count":
+                screening_count,
+
+            "interview_count":
+                interview_count,
+
+            "offer_count":
+                offer_count,
+
+            "rejected_count":
+                rejected_count,
+
+            "active_jobs":
+                active_jobs,
 
             "interview_rate":
                 interview_rate,
@@ -309,8 +323,8 @@ def pipeline(request):
             "offer_rate":
                 offer_rate,
 
-            "active_jobs":
-                active_jobs,
+            "success_rate":
+                success_rate,
         }
     )
 
@@ -347,3 +361,9 @@ def update_job_status(request, job_id):
         }
     )
 
+
+def calculate_percentage(value, total):
+    if total == 0:
+        return 0
+
+    return round((value / total) * 100, 1)
