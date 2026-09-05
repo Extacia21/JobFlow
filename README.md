@@ -12,7 +12,7 @@ Instead of managing applications across spreadsheets, notes, emails, and bookmar
 
 The JobFlow dashboard provides a centralized overview of your entire job search.
 
-![JobFlow Dashboard](screenshots/dashboard.png)
+![JobFlow Dashboard](dashboard.png)
 
 From the dashboard, users can quickly see:
 
