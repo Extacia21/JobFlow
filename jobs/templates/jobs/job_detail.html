@@ -1,164 +1,117 @@
+{% extends "base.html" %}
+
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}
+    {{ job.position }} | JobFlow
+{% endblock %}
 
-<head>
+{% block page_heading %}
+    Job Details
+{% endblock %}
 
-    <meta charset="UTF-8">
+{% block page_description %}
+    Review and manage this opportunity.
+{% endblock %}
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
+{% block topbar_actions %}
+
+    <a href="{% url 'applications' %}" class="btn btn-secondary topbar-btn">
+        ← Applications
+    </a>
+
+    <button
+        class="icon-button"
+        type="button"
+        title="Notifications"
+        aria-label="Notifications"
     >
+        🔔
+    </button>
 
-    <title>{{ job.position }} | JobFlow</title>
+    <div class="profile">
 
-    <link
-        rel="stylesheet"
-        href="{% static 'css/jobflow.css' %}"
-    >
-
-</head>
-
-
-<body>
-
-
-<div class="jobflow-layout">
-
-
-    <!-- SIDEBAR -->
-
-    <aside class="jobflow-sidebar">
-
-        <div class="jobflow-logo">
-            Job<span>Flow</span>
+        <div class="profile-avatar">
+            U
         </div>
 
-
-        <div class="sidebar-section">
-
-            <div class="sidebar-title">
-                Workspace
+        <div class="profile-info">
+            <div class="profile-name">
+                Job Seeker
             </div>
 
-
-            <a
-                href="{% url 'dashboard' %}"
-                class="sidebar-link"
-            >
-                <span class="sidebar-icon">⌂</span>
-                <span>Dashboard</span>
-            </a>
-
-
-            <a href="#" class="sidebar-link">
-                <span class="sidebar-icon">▣</span>
-                <span>Applications</span>
-            </a>
-
-
-            <a href="#" class="sidebar-link">
-                <span class="sidebar-icon">◷</span>
-                <span>Interviews</span>
-            </a>
-
-
-            <a href="#" class="sidebar-link">
-                <span class="sidebar-icon">↗</span>
-                <span>Analytics</span>
-            </a>
-
+            <div class="profile-role">
+                JobFlow User
+            </div>
         </div>
 
+    </div>
 
-        <div class="sidebar-section">
+{% endblock %}
 
-            <div class="sidebar-title">
-                Management
+
+{% block content %}
+
+<div class="page-container job-detail-page">
+
+
+    <!-- BREADCRUMB -->
+
+    <div class="breadcrumb">
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <span>›</span>
+
+        <a href="{% url 'applications' %}">
+            Applications
+        </a>
+
+        <span>›</span>
+
+        <span>
+            Job Details
+        </span>
+
+    </div>
+
+
+    <!-- JOB HEADER -->
+
+    <div class="job-detail-hero">
+
+        <div class="job-detail-main">
+
+            <div class="company-logo-large">
+                {{ job.company|first|upper }}
             </div>
 
+            <div class="job-detail-heading">
 
-            <a
-                href="{% url 'add_job' %}"
-                class="sidebar-link"
-            >
-                <span class="sidebar-icon">＋</span>
-                <span>Add Job</span>
-            </a>
+                <div class="job-detail-title-row">
 
+                    <h2>
+                        {{ job.position }}
+                    </h2>
 
-            <a href="#" class="sidebar-link">
-                <span class="sidebar-icon">★</span>
-                <span>Saved Jobs</span>
-            </a>
+                    <span class="status {{ job.status }}">
+                        {{ job.get_status_display }}
+                    </span>
 
-        </div>
+                </div>
 
+                <div class="job-detail-company">
 
-        <div class="sidebar-bottom">
+                    <strong>
+                        {{ job.company }}
+                    </strong>
 
-            <a href="#" class="sidebar-link">
-                <span class="sidebar-icon">⚙</span>
-                <span>Settings</span>
-            </a>
-
-            <a href="#" class="sidebar-link">
-                <span class="sidebar-icon">?</span>
-                <span>Help Center</span>
-            </a>
-
-        </div>
-
-    </aside>
-
-
-
-    <!-- MAIN -->
-
-    <main class="jobflow-main">
-
-
-        <div class="jobflow-topbar">
-
-            <div class="page-title">
-
-                <h1>
-                    Job Details
-                </h1>
-
-                <p>
-                    Review and manage this opportunity.
-                </p>
-
-            </div>
-
-
-            <div class="topbar-actions">
-
-                <button class="icon-button">
-                    🔔
-                </button>
-
-
-                <div class="profile">
-
-                    <div class="profile-avatar">
-                        U
-                    </div>
-
-                    <div>
-
-                        <div class="profile-name">
-                            Job Seeker
-                        </div>
-
-                        <div class="profile-role">
-                            JobFlow User
-                        </div>
-
-                    </div>
+                    {% if job.location %}
+                        <span class="separator">•</span>
+                        <span>{{ job.location }}</span>
+                    {% endif %}
 
                 </div>
 
@@ -167,115 +120,33 @@
         </div>
 
 
+        <div class="job-detail-hero-actions">
 
-        <!-- JOB HEADER -->
-
-        <div
-            class="panel"
-            style="margin-bottom:20px;"
-        >
-
-            <div
-                style="
-                padding:28px;
-                display:flex;
-                justify-content:space-between;
-                align-items:flex-start;
-                gap:20px;
-                "
+            <a
+                href="{% url 'edit_job' job.id %}"
+                class="btn btn-secondary"
             >
-
-
-                <div
-                    style="
-                    display:flex;
-                    gap:18px;
-                    align-items:center;
-                    "
-                >
-
-                    <div
-                        style="
-                        width:64px;
-                        height:64px;
-                        border-radius:16px;
-                        background:#eef2ff;
-                        color:#4f46e5;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        font-size:24px;
-                        font-weight:800;
-                        "
-                    >
-
-                        {{ job.company|first|upper }}
-
-                    </div>
-
-
-                    <div>
-
-                        <h1
-                            style="
-                            font-size:24px;
-                            margin-bottom:4px;
-                            "
-                        >
-
-                            {{ job.position }}
-
-                        </h1>
-
-
-                        <div
-                            style="
-                            color:#6b7280;
-                            font-size:14px;
-                            "
-                        >
-
-                            {{ job.company }}
-
-                            {% if job.location %}
-                                · {{ job.location }}
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <span class="status {{ job.status }}">
-
-                    {{ job.get_status_display }}
-
-                </span>
-
-
-            </div>
+                ✎ Edit
+            </a>
 
         </div>
 
+    </div>
 
 
-        <!-- CONTENT GRID -->
+    <!-- MAIN CONTENT -->
 
-        <div
-            style="
-            display:grid;
-            grid-template-columns:2fr 1fr;
-            gap:20px;
-            "
-        >
+    <div class="job-detail-grid">
 
 
-            <!-- INFORMATION -->
+        <!-- LEFT COLUMN -->
+
+        <div class="job-detail-primary">
+
+
+            <!-- OPPORTUNITY INFORMATION -->
 
             <div class="panel">
-
 
                 <div class="panel-header">
 
@@ -296,157 +167,181 @@
 
                 <div class="panel-body">
 
-
-                    <div
-                        style="
-                        display:grid;
-                        grid-template-columns:1fr 1fr;
-                        gap:20px;
-                        "
-                    >
+                    <div class="detail-info-grid">
 
 
-                        <div>
+                        <div class="detail-item">
 
-                            <div
-                                style="
-                                color:#9ca3af;
-                                font-size:10px;
-                                font-weight:700;
-                                text-transform:uppercase;
-                                margin-bottom:5px;
-                                "
-                            >
+                            <div class="detail-label">
                                 Company
                             </div>
 
-                            <div style="font-weight:600;">
+                            <div class="detail-value">
                                 {{ job.company }}
                             </div>
 
                         </div>
 
 
-                        <div>
+                        <div class="detail-item">
 
-                            <div
-                                style="
-                                color:#9ca3af;
-                                font-size:10px;
-                                font-weight:700;
-                                text-transform:uppercase;
-                                margin-bottom:5px;
-                                "
-                            >
+                            <div class="detail-label">
                                 Location
                             </div>
 
-                            <div style="font-weight:600;">
+                            <div class="detail-value">
                                 {{ job.location|default:"Not specified" }}
                             </div>
 
                         </div>
 
 
-                        <div>
+                        <div class="detail-item">
 
-                            <div
-                                style="
-                                color:#9ca3af;
-                                font-size:10px;
-                                font-weight:700;
-                                text-transform:uppercase;
-                                margin-bottom:5px;
-                                "
-                            >
+                            <div class="detail-label">
                                 Salary
                             </div>
 
-                            <div style="font-weight:600;">
+                            <div class="detail-value">
                                 {{ job.salary|default:"Not specified" }}
                             </div>
 
                         </div>
 
 
-                        <div>
+                        <div class="detail-item">
 
-                            <div
-                                style="
-                                color:#9ca3af;
-                                font-size:10px;
-                                font-weight:700;
-                                text-transform:uppercase;
-                                margin-bottom:5px;
-                                "
-                            >
+                            <div class="detail-label">
                                 Date Applied
                             </div>
 
-                            <div style="font-weight:600;">
-                                {{ job.date_applied|default:"Not applied yet" }}
+                            <div class="detail-value">
+                                {% if job.date_applied %}
+                                    {{ job.date_applied }}
+                                {% else %}
+                                    <span class="text-muted">
+                                        Not applied yet
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <div class="detail-label">
+                                Current Status
+                            </div>
+
+                            <div class="detail-value">
+
+                                <span class="status {{ job.status }}">
+                                    {{ job.get_status_display }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <div class="detail-label">
+                                Added to JobFlow
+                            </div>
+
+                            <div class="detail-value">
+                                {{ job.created_at|date:"d M Y" }}
                             </div>
 
                         </div>
 
 
                     </div>
-
-
-                    <div
-                        style="
-                        margin-top:28px;
-                        padding-top:22px;
-                        border-top:1px solid #e5e7eb;
-                        "
-                    >
-
-                        <div
-                            style="
-                            color:#9ca3af;
-                            font-size:10px;
-                            font-weight:700;
-                            text-transform:uppercase;
-                            margin-bottom:8px;
-                            "
-                        >
-                            Notes
-                        </div>
-
-
-                        <div
-                            style="
-                            color:#4b5563;
-                            font-size:13px;
-                            line-height:1.7;
-                            "
-                        >
-
-                            {{ job.notes|default:"No notes have been added to this opportunity." }}
-
-                        </div>
-
-                    </div>
-
 
                 </div>
 
             </div>
 
 
+            <!-- NOTES -->
 
-            <!-- ACTIONS -->
+            <div class="panel">
 
-            <div>
+                <div class="panel-header">
 
+                    <div>
+
+                        <div class="panel-title">
+                            Notes
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Your personal notes about this opportunity.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel-body">
+
+                    {% if job.notes %}
+
+                        <div class="job-notes">
+                            {{ job.notes|linebreaksbr }}
+                        </div>
+
+                    {% else %}
+
+                        <div class="detail-empty">
+
+                            <div class="detail-empty-icon">
+                                📝
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    No notes yet
+                                </strong>
+
+                                <p>
+                                    Add notes when editing this job to keep
+                                    useful information in one place.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- JOB URL -->
+
+            {% if job.job_url %}
 
                 <div class="panel">
 
-
                     <div class="panel-header">
 
-                        <div class="panel-title">
-                            Actions
+                        <div>
+
+                            <div class="panel-title">
+                                Job Posting
+                            </div>
+
+                            <div class="panel-subtitle">
+                                Original listing for this opportunity.
+                            </div>
+
                         </div>
 
                     </div>
@@ -454,80 +349,200 @@
 
                     <div class="panel-body">
 
+                        <div class="job-url-box">
+
+                            <div class="job-url-icon">
+                                ↗
+                            </div>
+
+                            <div class="job-url-content">
+
+                                <div class="job-url-label">
+                                    Job posting URL
+                                </div>
+
+                                <div class="job-url-value">
+                                    {{ job.job_url }}
+                                </div>
+
+                            </div>
+
+                            <a
+                                href="{{ job.job_url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn btn-primary"
+                            >
+                                Open Posting ↗
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- RIGHT COLUMN -->
+
+        <aside class="job-detail-sidebar">
+
+
+            <!-- ACTIONS -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div class="panel-title">
+                        Quick Actions
+                    </div>
+
+                </div>
+
+
+                <div class="panel-body action-stack">
+
+                    {% if job.job_url %}
 
                         <a
                             href="{{ job.job_url }}"
                             target="_blank"
-                            class="btn btn-primary"
-                            style="width:100%; margin-bottom:10px;"
+                            rel="noopener noreferrer"
+                            class="btn btn-primary btn-block"
                         >
                             ↗ View Job Posting
                         </a>
 
-
-                        <a
-                            href="{% url 'edit_job' job.id %}"
-                            class="btn btn-secondary"
-                            style="width:100%; margin-bottom:10px;"
-                        >
-                            ✎ Edit Job
-                        </a>
+                    {% endif %}
 
 
-                        <a
-                            href="{% url 'delete_job' job.id %}"
-                            class="btn"
-                            style="
-                            width:100%;
-                            background:#fee2e2;
-                            color:#dc2626;
-                            "
-                        >
-                            × Delete Job
-                        </a>
+                    <a
+                        href="{% url 'edit_job' job.id %}"
+                        class="btn btn-secondary btn-block"
+                    >
+                        ✎ Edit Job
+                    </a>
 
+
+                    <a
+                        href="{% url 'applications' %}"
+                        class="btn btn-secondary btn-block"
+                    >
+                        ▣ All Applications
+                    </a>
+
+
+                    <a
+                        href="{% url 'delete_job' job.id %}"
+                        class="btn btn-danger btn-block"
+                    >
+                        × Delete Job
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- STATUS CARD -->
+
+            <div class="panel status-overview-card">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Pipeline Status
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Current position in your job search.
+                        </div>
 
                     </div>
 
                 </div>
 
 
-                <div
-                    style="
-                    margin-top:18px;
-                    background:#eef2ff;
-                    border-radius:12px;
-                    padding:18px;
-                    color:#4338ca;
-                    font-size:12px;
-                    line-height:1.6;
-                    "
-                >
+                <div class="panel-body">
 
-                    💡 <strong>JobFlow tip</strong>
+                    <div class="current-status">
 
-                    Keep this opportunity updated as it moves through
-                    your application pipeline.
+                        <div class="current-status-icon">
+                            {% if job.status == "saved" %}
+                                ★
+                            {% elif job.status == "applied" %}
+                                ✓
+                            {% elif job.status == "screening" %}
+                                ◷
+                            {% elif job.status == "interview" %}
+                                ◆
+                            {% elif job.status == "offer" %}
+                                ★
+                            {% elif job.status == "rejected" %}
+                                ×
+                            {% else %}
+                                •
+                            {% endif %}
+                        </div>
+
+                        <div>
+
+                            <span class="detail-label">
+                                CURRENT STATUS
+                            </span>
+
+                            <strong>
+                                {{ job.get_status_display }}
+                            </strong>
+
+                        </div>
+
+                    </div>
 
                 </div>
-
 
             </div>
 
 
-        </div>
+            <!-- TIP -->
+
+            <div class="jobflow-tip">
+
+                <div class="tip-icon">
+                    💡
+                </div>
+
+                <div class="tip-content">
+
+                    <strong>
+                        JobFlow tip
+                    </strong>
+
+                    <p>
+                        Keep your status updated as this opportunity
+                        progresses. Accurate statuses make your pipeline
+                        and analytics much more useful.
+                    </p>
+
+                </div>
+
+            </div>
 
 
-    </main>
+        </aside>
+
+
+    </div>
+
 
 </div>
 
-
-<script
-    src="{% static 'js/jobflow.js' %}"
-></script>
-
-
-</body>
-
-</html>
+{% endblock %}

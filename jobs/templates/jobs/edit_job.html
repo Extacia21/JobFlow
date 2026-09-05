@@ -1,153 +1,234 @@
+{% extends "base.html" %}
+
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}
+    Edit {{ job.position }} | JobFlow
+{% endblock %}
 
-<head>
+{% block page_heading %}
+    Edit Job
+{% endblock %}
 
-    <meta charset="UTF-8">
+{% block page_description %}
+    Update your application information.
+{% endblock %}
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
+{% block topbar_actions %}
+
+    <a
+        href="{% url 'job_detail' job.id %}"
+        class="btn btn-secondary topbar-btn"
     >
+        ← Job Details
+    </a>
 
-    <title>JobFlow | Edit Job</title>
-
-    <link
-        rel="stylesheet"
-        href="{% static 'css/jobflow.css' %}"
+    <button
+        class="icon-button"
+        type="button"
+        title="Notifications"
+        aria-label="Notifications"
     >
+        🔔
+    </button>
 
-</head>
+    <div class="profile">
 
-
-<body>
-
-
-<div class="jobflow-layout">
-
-
-    <!-- SIDEBAR -->
-
-    <aside class="jobflow-sidebar">
-
-
-        <div class="jobflow-logo">
-            Job<span>Flow</span>
+        <div class="profile-avatar">
+            U
         </div>
 
+        <div class="profile-info">
 
-        <div class="sidebar-section">
-
-            <div class="sidebar-title">
-                Workspace
+            <div class="profile-name">
+                Job Seeker
             </div>
 
-
-            <a
-                href="{% url 'dashboard' %}"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ⌂
-                </span>
-
-                <span>
-                    Dashboard
-                </span>
-
-            </a>
-
-
-            <a
-                href="{% url 'applications' %}"
-                class="sidebar-link active"
-            >
-
-                <span class="sidebar-icon">
-                    ▣
-                </span>
-
-                <span>
-                    Applications
-                </span>
-
-            </a>
-
-
-        </div>
-
-
-        <div class="sidebar-section">
-
-            <div class="sidebar-title">
-                Management
-            </div>
-
-
-            <a
-                href="{% url 'add_job' %}"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ＋
-                </span>
-
-                <span>
-                    Add Job
-                </span>
-
-            </a>
-
-        </div>
-
-
-    </aside>
-
-
-
-    <!-- MAIN -->
-
-    <main class="jobflow-main">
-
-
-        <div class="jobflow-topbar">
-
-            <div class="page-title">
-
-                <h1>
-                    Edit Job
-                </h1>
-
-                <p>
-                    Update your application information.
-                </p>
-
+            <div class="profile-role">
+                JobFlow User
             </div>
 
         </div>
 
+    </div>
+
+{% endblock %}
 
 
-        <section class="form-panel">
+{% block content %}
+
+<div class="page-container edit-job-page">
 
 
-            <div class="panel-header">
+    <!-- BREADCRUMB -->
 
-                <div>
+    <div class="breadcrumb">
 
-                    <div class="panel-title">
-                        Application Details
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <span>›</span>
+
+        <a href="{% url 'applications' %}">
+            Applications
+        </a>
+
+        <span>›</span>
+
+        <a href="{% url 'job_detail' job.id %}">
+            {{ job.position }}
+        </a>
+
+        <span>›</span>
+
+        <span>
+            Edit
+        </span>
+
+    </div>
+
+
+    <!-- PAGE INTRO -->
+
+    <div class="page-intro">
+
+        <div>
+
+            <div class="eyebrow">
+                JOB MANAGEMENT
+            </div>
+
+            <h2>
+                Edit opportunity
+            </h2>
+
+            <p>
+                Update the details of this job application and keep
+                your pipeline accurate.
+            </p>
+
+        </div>
+
+        <div class="page-intro-icon edit-icon">
+            ✎
+        </div>
+
+    </div>
+
+
+    <!-- FORM PANEL -->
+
+    <div class="panel job-form-panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    Application Details
+                </div>
+
+                <div class="panel-subtitle">
+                    Keep your job information accurate and up to date.
+                </div>
+
+            </div>
+
+
+            <div class="editing-indicator">
+
+                <span class="editing-dot"></span>
+
+                Editing
+
+            </div>
+
+        </div>
+
+
+        <div class="panel-body">
+
+
+            {% if messages %}
+
+                <div class="messages">
+
+                    {% for message in messages %}
+
+                        <div class="alert alert-{{ message.tags }}">
+
+                            <div class="alert-icon">
+                                ✓
+                            </div>
+
+                            <div>
+                                {{ message }}
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+
+            {% if form.errors %}
+
+                <div class="alert alert-error">
+
+                    <div class="alert-icon">
+                        !
                     </div>
 
-                    <div class="panel-subtitle">
-                        Keep your job information up to date.
+                    <div>
+
+                        <strong>
+                            Please review the form.
+                        </strong>
+
+                        <p>
+                            Some information needs to be corrected
+                            before you save your changes.
+                        </p>
+
                     </div>
 
                 </div>
+
+            {% endif %}
+
+
+            <!-- CURRENT JOB SUMMARY -->
+
+            <div class="editing-job-summary">
+
+                <div class="company-logo-small">
+                    {{ job.company|first|upper }}
+                </div>
+
+                <div class="editing-job-info">
+
+                    <strong>
+                        {{ job.position }}
+                    </strong>
+
+                    <span>
+                        {{ job.company }}
+
+                        {% if job.location %}
+                            · {{ job.location }}
+                        {% endif %}
+                    </span>
+
+                </div>
+
+                <span class="status {{ job.status }}">
+                    {{ job.get_status_display }}
+                </span>
 
             </div>
 
@@ -160,179 +241,327 @@
                 {% csrf_token %}
 
 
-                <div class="form-grid">
+                <!-- OPPORTUNITY DETAILS -->
 
+                <div class="form-section">
 
-                    <div class="form-group">
+                    <div class="form-section-heading">
 
-                        <label>
-                            Company
-                        </label>
+                        <div class="form-section-number">
+                            01
+                        </div>
 
-                        <input
-                            type="text"
-                            name="company"
-                            value="{{ job.company }}"
-                            required
-                        >
+                        <div>
 
-                    </div>
+                            <h3>
+                                Opportunity details
+                            </h3>
 
+                            <p>
+                                Update the core information about this position.
+                            </p>
 
-                    <div class="form-group">
-
-                        <label>
-                            Position
-                        </label>
-
-                        <input
-                            type="text"
-                            name="position"
-                            value="{{ job.position }}"
-                            required
-                        >
+                        </div>
 
                     </div>
 
 
-                    <div class="form-group">
+                    <div class="form-grid">
 
-                        <label>
-                            Location
-                        </label>
 
-                        <input
-                            type="text"
-                            name="location"
-                            value="{{ job.location }}"
-                            required
-                        >
+                        <div class="form-group">
+
+                            <label
+                                for="id_company"
+                                class="form-label"
+                            >
+                                Company
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="id_company"
+                                name="company"
+                                value="{{ job.company }}"
+                                placeholder="e.g. Microsoft"
+                                autocomplete="organization"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label
+                                for="id_position"
+                                class="form-label"
+                            >
+                                Position
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="id_position"
+                                name="position"
+                                value="{{ job.position }}"
+                                placeholder="e.g. ICT Technician"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label
+                                for="id_location"
+                                class="form-label"
+                            >
+                                Location
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="id_location"
+                                name="location"
+                                value="{{ job.location }}"
+                                placeholder="e.g. Harare, Zimbabwe"
+                                autocomplete="address-level2"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label
+                                for="id_salary"
+                                class="form-label"
+                            >
+                                Salary
+                            </label>
+
+                            <input
+                                type="text"
+                                id="id_salary"
+                                name="salary"
+                                value="{{ job.salary }}"
+                                placeholder="e.g. $800 - $1,200"
+                            >
+
+                            <div class="field-help">
+                                Add the advertised salary or salary range if available.
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label
+                                for="id_job_url"
+                                class="form-label"
+                            >
+                                Job URL
+                            </label>
+
+                            <input
+                                type="url"
+                                id="id_job_url"
+                                name="job_url"
+                                value="{{ job.job_url }}"
+                                placeholder="https://example.com/job"
+                            >
+
+                            <div class="field-help">
+                                Link to the original job posting.
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label
+                                for="id_date_applied"
+                                class="form-label"
+                            >
+                                Date Applied
+                            </label>
+
+                            <input
+                                type="date"
+                                id="id_date_applied"
+                                name="date_applied"
+                                value="{{ job.date_applied|date:'Y-m-d' }}"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group form-group-full">
+
+                            <label
+                                for="id_status"
+                                class="form-label"
+                            >
+                                Application Status
+                            </label>
+
+                            <select
+                                id="id_status"
+                                name="status"
+                            >
+
+                                {% for value, label in status_choices %}
+
+                                    <option
+                                        value="{{ value }}"
+                                        {% if job.status == value %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ label }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                            <div class="field-help">
+                                Update this whenever the opportunity moves
+                                to another stage.
+                            </div>
+
+                        </div>
+
 
                     </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Salary
-                        </label>
-
-                        <input
-                            type="text"
-                            name="salary"
-                            value="{{ job.salary }}"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Job URL
-                        </label>
-
-                        <input
-                            type="url"
-                            name="job_url"
-                            value="{{ job.job_url }}"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Date Applied
-                        </label>
-
-                        <input
-                            type="date"
-                            name="date_applied"
-                            value="{{ job.date_applied|date:'Y-m-d' }}"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Status
-                        </label>
-
-                        <select name="status">
-
-                            {% for value, label in status_choices %}
-
-                                <option
-                                    value="{{ value }}"
-                                    {% if job.status == value %}
-                                        selected
-                                    {% endif %}
-                                >
-
-                                    {{ label }}
-
-                                </option>
-
-                            {% endfor %}
-
-                        </select>
-
-                    </div>
-
 
                 </div>
 
 
-                <div class="form-group">
+                <!-- NOTES -->
 
-                    <label>
-                        Notes
-                    </label>
+                <div class="form-section">
 
-                    <textarea
-                        name="notes"
-                        rows="6"
-                    >{{ job.notes }}</textarea>
+                    <div class="form-section-heading">
+
+                        <div class="form-section-number">
+                            02
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Notes
+                            </h3>
+
+                            <p>
+                                Record anything useful about this opportunity.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            for="id_notes"
+                            class="form-label"
+                        >
+                            Additional Notes
+                        </label>
+
+                        <textarea
+                            id="id_notes"
+                            name="notes"
+                            rows="7"
+                            placeholder="Add interview notes, recruiter information, requirements, follow-up reminders, or anything else useful..."
+                        >{{ job.notes }}</textarea>
+
+                    </div>
 
                 </div>
 
+
+                <!-- FORM ACTIONS -->
 
                 <div class="form-actions">
 
-                    <a
-                        href="{% url 'job_detail' job.id %}"
-                        class="btn btn-secondary"
-                    >
-                        Cancel
-                    </a>
+                    <div class="form-actions-left">
+
+                        <a
+                            href="{% url 'job_detail' job.id %}"
+                            class="btn btn-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                    </div>
 
 
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                    >
-                        Save Changes
-                    </button>
+                    <div class="form-actions-right">
+
+                        <a
+                            href="{% url 'job_detail' job.id %}"
+                            class="btn btn-ghost"
+                        >
+                            Discard Changes
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-save-job"
+                        >
+                            <span>✓</span>
+                            Save Changes
+                        </button>
+
+                    </div>
 
                 </div>
 
 
             </form>
 
+        </div>
 
-        </section>
+    </div>
 
 
-    </main>
+    <!-- TIP -->
+
+    <div class="jobflow-tip">
+
+        <div class="tip-icon">
+            💡
+        </div>
+
+        <div class="tip-content">
+
+            <strong>
+                JobFlow tip
+            </strong>
+
+            <p>
+                Keeping your application status and notes updated helps
+                JobFlow give you a clearer picture of your job search,
+                interviews and overall progress.
+            </p>
+
+        </div>
+
+    </div>
 
 
 </div>
 
-
-</body>
-
-</html>
+{% endblock %}

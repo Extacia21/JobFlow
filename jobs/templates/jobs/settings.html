@@ -1,0 +1,608 @@
+{% extends "base.html" %}
+
+{% block title %}Settings | JobFlow{% endblock %}
+
+{% block page_heading %}
+Settings
+{% endblock %}
+
+{% block page_description %}
+Manage your JobFlow preferences and workspace.
+{% endblock %}
+
+{% block topbar_actions %}
+
+<a href="{% url 'add_job' %}" class="btn btn-primary">
+    <span>＋</span>
+    Add Job
+</a>
+
+<div class="profile">
+
+<div class="profile-avatar">
+    U
+</div>
+
+<div>
+    <div class="profile-name">
+        Job Seeker
+    </div>
+
+    <div class="profile-role">
+        JobFlow User
+    </div>
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="page-container settings-page">
+
+<!-- =========================================
+     SETTINGS INTRO
+========================================== -->
+
+<section class="settings-hero">
+
+    <div class="settings-hero-icon">
+        ⚙
+    </div>
+
+    <div>
+
+        <span class="eyebrow">
+            WORKSPACE CONFIGURATION
+        </span>
+
+        <h2>
+            Make JobFlow work for you.
+        </h2>
+
+        <p>
+            Manage your profile, notifications and job-search
+            preferences from one place.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     PROFILE
+========================================== -->
+
+<section class="settings-section panel">
+
+    <div class="settings-heading">
+
+        <div>
+
+            <span class="eyebrow">
+                PROFILE
+            </span>
+
+            <h2>
+                Your workspace
+            </h2>
+
+            <p>
+                Information associated with your JobFlow workspace.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-profile">
+
+        <div class="settings-avatar">
+            U
+        </div>
+
+        <div class="settings-profile-info">
+
+            <h3>
+                Job Seeker
+            </h3>
+
+            <p>
+                JobFlow User
+            </p>
+
+            <span class="settings-status">
+                <span></span>
+                Workspace active
+            </span>
+
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-secondary"
+            disabled
+            title="Profile editing will be available in a future update"
+        >
+            Edit Profile
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     NOTIFICATIONS
+========================================== -->
+
+<section class="settings-section panel">
+
+    <div class="settings-heading">
+
+        <div>
+
+            <span class="eyebrow">
+                NOTIFICATIONS
+            </span>
+
+            <h2>
+                Stay informed
+            </h2>
+
+            <p>
+                Choose which reminders and notifications you receive.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-options">
+
+
+        <!-- EMAIL NOTIFICATIONS -->
+
+        <div class="preference-row">
+
+            <div class="preference-content">
+
+                <div class="preference-icon">
+                    ✉
+                </div>
+
+                <div>
+
+                    <strong>
+                        Email notifications
+                    </strong>
+
+                    <span>
+                        Receive important updates and reminders
+                        about your job search.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <label class="toggle">
+
+                <input
+                    type="checkbox"
+                    id="emailNotifications"
+                >
+
+                <span class="toggle-slider"></span>
+
+            </label>
+
+        </div>
+
+
+
+        <!-- APPLICATION REMINDERS -->
+
+        <div class="preference-row">
+
+            <div class="preference-content">
+
+                <div class="preference-icon">
+                    ◷
+                </div>
+
+                <div>
+
+                    <strong>
+                        Application reminders
+                    </strong>
+
+                    <span>
+                        Get reminders to follow up on applications
+                        that may need attention.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <label class="toggle">
+
+                <input
+                    type="checkbox"
+                    id="applicationReminders"
+                    checked
+                >
+
+                <span class="toggle-slider"></span>
+
+            </label>
+
+        </div>
+
+
+
+        <!-- INTERVIEW REMINDERS -->
+
+        <div class="preference-row">
+
+            <div class="preference-content">
+
+                <div class="preference-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Interview reminders
+                    </strong>
+
+                    <span>
+                        Stay on top of upcoming interview
+                        opportunities.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <label class="toggle">
+
+                <input
+                    type="checkbox"
+                    id="interviewReminders"
+                    checked
+                >
+
+                <span class="toggle-slider"></span>
+
+            </label>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     JOB SEARCH PREFERENCES
+========================================== -->
+
+<section class="settings-section panel">
+
+    <div class="settings-heading">
+
+        <div>
+
+            <span class="eyebrow">
+                JOB SEARCH
+            </span>
+
+            <h2>
+                Search preferences
+            </h2>
+
+            <p>
+                Configure the information you want to prioritize
+                throughout your job search.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-form-grid">
+
+
+        <div class="settings-field">
+
+            <label for="preferredLocation">
+                Preferred location
+            </label>
+
+            <select id="preferredLocation">
+
+                <option>
+                    Any location
+                </option>
+
+                <option>
+                    Remote
+                </option>
+
+                <option>
+                    Hybrid
+                </option>
+
+                <option>
+                    On-site
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="settings-field">
+
+            <label for="defaultStatus">
+                Default job status
+            </label>
+
+            <select id="defaultStatus">
+
+                <option value="saved">
+                    Saved
+                </option>
+
+                <option value="applied">
+                    Applied
+                </option>
+
+                <option value="screening">
+                    Screening
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     DATA MANAGEMENT
+========================================== -->
+
+<section class="settings-section panel">
+
+    <div class="settings-heading">
+
+        <div>
+
+            <span class="eyebrow">
+                DATA MANAGEMENT
+            </span>
+
+            <h2>
+                Your application data
+            </h2>
+
+            <p>
+                Manage and export the opportunities you have
+                recorded in JobFlow.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-data-card">
+
+        <div class="settings-data-icon">
+            ↓
+        </div>
+
+        <div class="settings-data-content">
+
+            <h3>
+                Export applications
+            </h3>
+
+            <p>
+                Download your tracked jobs and application
+                information for backup or analysis.
+            </p>
+
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-secondary"
+            id="exportApplications"
+        >
+            Export Data
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     DANGER ZONE
+========================================== -->
+
+<section class="settings-section panel danger-zone">
+
+    <div class="settings-heading">
+
+        <div>
+
+            <span class="eyebrow danger-eyebrow">
+                DANGER ZONE
+            </span>
+
+            <h2>
+                Destructive actions
+            </h2>
+
+            <p>
+                These actions can permanently affect your
+                JobFlow data.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="danger-action">
+
+        <div>
+
+            <strong>
+                Delete all application data
+            </strong>
+
+            <span>
+                Permanently remove all tracked jobs and
+                application information.
+            </span>
+
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-danger"
+            disabled
+            title="This feature will be available in a future update"
+        >
+            Delete Data
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     SETTINGS FOOTER
+========================================== -->
+
+<section class="settings-footer">
+
+    <div>
+
+        <span class="settings-footer-icon">
+            ✓
+        </span>
+
+        <div>
+
+            <strong>
+                You're in control
+            </strong>
+
+            <p>
+                JobFlow settings are designed to keep your
+                workspace organized and focused.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+        Back to Dashboard
+    </a>
+
+</section>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const toggles = document.querySelectorAll(
+        ".settings-page .toggle input"
+    );
+
+    toggles.forEach(function (toggle) {
+
+        toggle.addEventListener("change", function () {
+
+            const preference = this.id;
+
+            console.log(
+                "JobFlow preference changed:",
+                preference,
+                this.checked
+            );
+
+            /*
+             * Backend persistence can be connected here later.
+             * For now the controls provide the complete UI behaviour.
+             */
+
+        });
+
+    });
+
+
+    const exportButton = document.getElementById(
+        "exportApplications"
+    );
+
+    if (exportButton) {
+
+        exportButton.addEventListener("click", function () {
+
+            /*
+             * Connect this button to a Django export endpoint
+             * once the export functionality is implemented.
+             */
+
+            if (typeof showJobFlowToast === "function") {
+
+                showJobFlowToast(
+                    "Application export will be available soon.",
+                    "info"
+                );
+
+            }
+
+        });
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

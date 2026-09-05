@@ -1,395 +1,96 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-    console.log("JobFlow interface loaded successfully.");
-
-});
 /* =========================================================
-   JOBFLOW — KANBAN DRAG & DROP
+   JOBFLOW — PROFESSIONAL APPLICATION JAVASCRIPT
+   Version: 4.0
+   =========================================================
+
+   Features:
+   - Global UI initialization
+   - Toast notifications
+   - CSRF protection
+   - Kanban drag & drop
+   - AJAX status updates
+   - Pipeline search & filtering
+   - Column counters
+   - Delete confirmations
+   - Loading states
+   - Dashboard charts
+   - Analytics charts
+   - Responsive navigation
+   - Accessibility helpers
+
    ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const cards =
-            document.querySelectorAll(
-                ".kanban-card"
-            );
-
-        const columns =
-            document.querySelectorAll(
-                ".kanban-column"
-            );
-
-
-        let draggedCard = null;
-
-
-        cards.forEach(
-            function (card) {
-
-                card.addEventListener(
-                    "dragstart",
-                    function () {
-
-                        draggedCard = this;
-
-                        this.classList.add(
-                            "dragging"
-                        );
-
-                    }
-                );
-
-
-                card.addEventListener(
-                    "dragend",
-                    function () {
-
-                        this.classList.remove(
-                            "dragging"
-                        );
-
-                        draggedCard = null;
-
-                    }
-                );
-
-            }
-        );
-
-
-        columns.forEach(
-            function (column) {
-
-                column.addEventListener(
-                    "dragover",
-                    function (event) {
-
-                        event.preventDefault();
-
-                        this.classList.add(
-                            "drag-over"
-                        );
-
-                    }
-                );
-
-
-                column.addEventListener(
-                    "dragleave",
-                    function () {
-
-                        this.classList.remove(
-                            "drag-over"
-                        );
-
-                    }
-                );
-
-
-                column.addEventListener(
-                    "drop",
-                    function (event) {
-
-                        event.preventDefault();
-
-                        this.classList.remove(
-                            "drag-over"
-                        );
-
-
-                        if (!draggedCard) {
-                            return;
-                        }
-
-
-                        const cardsContainer =
-                            this.querySelector(
-                                ".kanban-cards"
-                            );
-
-
-                        cardsContainer.appendChild(
-                            draggedCard
-                        );
-
-
-                        const jobId =
-                            draggedCard.dataset.jobId;
-
-                        const newStatus =
-                            this.dataset.status;
-
-
-                        updateJobStatus(
-                            jobId,
-                            newStatus
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-    }
-);
 
 /* =========================================================
-   JOBFLOW KANBAN DRAG & DROP
+   1. GLOBAL JOBFLOW OBJECT
    ========================================================= */
 
-document.addEventListener("DOMContentLoaded", function () {
-
-    const cards = document.querySelectorAll(
-        ".pipeline-card"
-    );
-
-    const dropZones = document.querySelectorAll(
-        ".pipeline-cards"
-    );
-
-
-    let draggedCard = null;
-
+const JobFlow = {
 
     /* -----------------------------------------------------
-       DRAG START
+       STATE
        ----------------------------------------------------- */
 
-    cards.forEach(function (card) {
+    draggedCard: null,
 
-        card.addEventListener(
-            "dragstart",
-            function () {
+    activePipelineFilter: "all",
 
-                draggedCard = card;
+    toastTimer: null,
 
-                card.classList.add(
-                    "dragging"
-                );
 
-            }
+    /* =====================================================
+       INITIALIZE
+       ===================================================== */
+
+    init() {
+
+        console.log(
+            "JobFlow interface loaded successfully."
         );
 
+        this.initKanban();
 
-        card.addEventListener(
-            "dragend",
-            function () {
+        this.initPipelineSearch();
 
-                card.classList.remove(
-                    "dragging"
-                );
+        this.initDeleteConfirmation();
 
-                dropZones.forEach(
-                    function (zone) {
+        this.initLoadingButtons();
 
-                        zone.classList.remove(
-                            "drag-over"
-                        );
+        this.initDismissibleAlerts();
 
-                    }
-                );
+        this.initKeyboardShortcuts();
 
-            }
-        );
+        this.initCharts();
 
-    });
+        this.initMobileNavigation();
 
+        this.initAutoFocus();
 
-    /* -----------------------------------------------------
-       DRAG OVER
-       ----------------------------------------------------- */
+        this.initExternalLinks();
 
-    dropZones.forEach(function (zone) {
+    },
 
-        zone.addEventListener(
-            "dragover",
-            function (event) {
 
-                event.preventDefault();
+    /* =====================================================
+       2. CSRF TOKEN
+       ===================================================== */
 
-                zone.classList.add(
-                    "drag-over"
-                );
+    getCSRFToken() {
 
-            }
-        );
-
-
-        zone.addEventListener(
-            "dragleave",
-            function () {
-
-                zone.classList.remove(
-                    "drag-over"
-                );
-
-            }
-        );
-
-
-        /* -------------------------------------------------
-           DROP
-           ------------------------------------------------- */
-
-        zone.addEventListener(
-            "drop",
-            function (event) {
-
-                event.preventDefault();
-
-                zone.classList.remove(
-                    "drag-over"
-                );
-
-
-                if (!draggedCard) {
-                    return;
-                }
-
-
-                const jobId =
-                    draggedCard.dataset.jobId;
-
-
-                const newStatus =
-                    zone.dataset.status;
-
-
-                const oldStatus =
-                    draggedCard
-                        .closest(".pipeline-column")
-                        .dataset.status;
-
-
-                if (newStatus === oldStatus) {
-                    return;
-                }
-
-
-                zone.appendChild(
-                    draggedCard
-                );
-
-
-                updateJobStatus(
-                    jobId,
-                    newStatus,
-                    draggedCard,
-                    zone
-                );
-
-            }
-        );
-
-    });
-
-
-    /* -----------------------------------------------------
-       UPDATE DJANGO
-       ----------------------------------------------------- */
-
-    function updateJobStatus(
-        jobId,
-        newStatus,
-        card,
-        zone
-    ) {
-
-        const csrfToken =
-            getCSRFToken();
-
-
-        const formData =
-            new FormData();
-
-        formData.append(
-            "status",
-            newStatus
-        );
-
-
-        fetch(
-            `/jobs/${jobId}/status/`,
-            {
-                method: "POST",
-
-                headers: {
-                    "X-CSRFToken":
-                        csrfToken
-                },
-
-                body: formData
-            }
-        )
-
-        .then(function (response) {
-
-            if (!response.ok) {
-                throw new Error(
-                    "Status update failed"
-                );
-            }
-
-            return response.json();
-
-        })
-
-        .then(function (data) {
-
-            if (data.success) {
-
-                showJobFlowToast(
-                    `Moved to ${data.status_label}`
-                );
-
-            }
-
-        })
-
-        .catch(function () {
-
-            showJobFlowToast(
-                "Could not update job status.",
-                true
-            );
-
-            location.reload();
-
-        });
-
-    }
-
-
-    /* -----------------------------------------------------
-       CSRF TOKEN
-       ----------------------------------------------------- */
-
-    function getCSRFToken() {
+        const cookieName = "csrftoken=";
 
         const cookies =
             document.cookie.split(";");
 
+        for (let cookie of cookies) {
 
-        for (
-            let cookie of cookies
-        ) {
+            cookie = cookie.trim();
 
-            cookie =
-                cookie.trim();
-
-
-            if (
-                cookie.startsWith(
-                    "csrftoken="
-                )
-            ) {
+            if (cookie.startsWith(cookieName)) {
 
                 return decodeURIComponent(
                     cookie.substring(
-                        "csrftoken=".length
+                        cookieName.length
                     )
                 );
 
@@ -397,59 +98,113 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-
         return "";
 
-    }
+    },
 
 
-    /* -----------------------------------------------------
-       TOAST NOTIFICATION
-       ----------------------------------------------------- */
+    /* =====================================================
+       3. TOAST SYSTEM
+       ===================================================== */
 
-    function showJobFlowToast(
-        message,
-        error = false
-    ) {
+    showToast(message, type = "success") {
+
+        /* Remove existing toast */
 
         const existing =
             document.querySelector(
                 ".jobflow-toast"
             );
 
-
         if (existing) {
-            existing.remove();
+
+            existing.classList.add("hide");
+
+            setTimeout(() => {
+                existing.remove();
+            }, 200);
+
         }
 
 
-        const toast =
-            document.createElement(
-                "div"
+        /* Clear previous timer */
+
+        if (this.toastTimer) {
+
+            clearTimeout(
+                this.toastTimer
             );
 
+        }
+
+
+        /* Create toast */
+
+        const toast =
+            document.createElement("div");
 
         toast.className =
             "jobflow-toast";
 
 
-        if (error) {
+        /* Toast types */
 
-            toast.classList.add(
-                "error"
-            );
+        if (type === "error") {
+
+            toast.classList.add("error");
+
+        }
+
+        if (type === "warning") {
+
+            toast.classList.add("warning");
+
+        }
+
+        if (type === "info") {
+
+            toast.classList.add("info");
 
         }
 
 
+        /* Icons */
+
+        const icons = {
+
+            success: "✓",
+
+            error: "!",
+
+            warning: "⚠",
+
+            info: "i"
+
+        };
+
+
+        const icon =
+            icons[type] || icons.success;
+
+
         toast.innerHTML = `
+
             <span class="toast-icon">
-                ${error ? "!" : "✓"}
+                ${icon}
             </span>
 
-            <span>
-                ${message}
+            <span class="toast-message">
+                ${this.escapeHTML(message)}
             </span>
+
+            <button
+                type="button"
+                class="toast-close"
+                aria-label="Close notification"
+            >
+                ×
+            </button>
+
         `;
 
 
@@ -458,217 +213,454 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
-        setTimeout(
-            function () {
+        /* Close button */
 
-                toast.classList.add(
-                    "hide"
-                );
-
-                setTimeout(
-                    function () {
-                        toast.remove();
-                    },
-                    300
-                );
-
-            },
-            2500
-        );
-
-    }
-
-});
-/* =========================================================
-   JOBFLOW KANBAN
-   ========================================================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const cards =
-        document.querySelectorAll(".job-card");
-
-    const columns =
-        document.querySelectorAll(".kanban-cards");
-
-
-    let draggedCard = null;
-
-
-    /* =====================================================
-       DRAG START
-       ===================================================== */
-
-    cards.forEach(card => {
-
-        card.addEventListener("dragstart", event => {
-
-            draggedCard = card;
-
-            card.classList.add("is-dragging");
-
-            event.dataTransfer.effectAllowed = "move";
-
-            event.dataTransfer.setData(
-                "text/plain",
-                card.dataset.jobId
+        const close =
+            toast.querySelector(
+                ".toast-close"
             );
+
+        if (close) {
+
+            close.addEventListener(
+                "click",
+                () => this.removeToast(toast)
+            );
+
+        }
+
+
+        /* Animate in */
+
+        requestAnimationFrame(() => {
+
+            toast.classList.add("show");
 
         });
 
 
-        /* =================================================
-           DRAG END
-           ================================================= */
+        /* Auto remove */
 
-        card.addEventListener("dragend", () => {
+        this.toastTimer =
+            setTimeout(() => {
 
-            card.classList.remove(
-                "is-dragging"
-            );
+                this.removeToast(toast);
 
-            columns.forEach(column => {
+            }, 3500);
 
-                column.classList.remove(
-                    "drag-over"
-                );
-
-            });
-
-        });
-
-    });
+    },
 
 
-    /* =====================================================
-       DRAG OVER
-       ===================================================== */
+    /* -----------------------------------------------------
+       REMOVE TOAST
+       ----------------------------------------------------- */
 
-    columns.forEach(column => {
+    removeToast(toast) {
 
-        column.addEventListener(
-            "dragover",
-            event => {
+        if (!toast) {
+            return;
+        }
 
-                event.preventDefault();
+        toast.classList.add("hide");
 
-                column.classList.add(
-                    "drag-over"
-                );
+        setTimeout(() => {
 
-                event.dataTransfer.dropEffect =
-                    "move";
+            if (toast.parentNode) {
+
+                toast.remove();
 
             }
-        );
+
+        }, 300);
+
+    },
 
 
-        /* =================================================
-           DRAG LEAVE
-           ================================================= */
+    /* =====================================================
+       4. SAFE HTML ESCAPE
+       ===================================================== */
 
-        column.addEventListener(
-            "dragleave",
-            event => {
+    escapeHTML(value) {
 
-                if (
-                    !column.contains(
-                        event.relatedTarget
-                    )
-                ) {
+        const div =
+            document.createElement("div");
 
-                    column.classList.remove(
+        div.textContent =
+            value ?? "";
+
+        return div.innerHTML;
+
+    },
+
+
+    /* =====================================================
+       5. KANBAN SYSTEM
+       ===================================================== */
+
+    initKanban() {
+
+        const cards =
+            document.querySelectorAll(
+                ".job-card, .kanban-card, .pipeline-card"
+            );
+
+
+        const dropZones =
+            document.querySelectorAll(
+                ".kanban-cards, .pipeline-cards"
+            );
+
+
+        const columns =
+            document.querySelectorAll(
+                ".kanban-column, .pipeline-column"
+            );
+
+
+        /* Nothing to initialize */
+
+        if (
+            !cards.length &&
+            !dropZones.length
+        ) {
+
+            return;
+
+        }
+
+
+        /* -------------------------------------------------
+           MAKE CARDS DRAGGABLE
+           ------------------------------------------------- */
+
+        cards.forEach(card => {
+
+            card.setAttribute(
+                "draggable",
+                "true"
+            );
+
+
+            /* DRAG START */
+
+            card.addEventListener(
+                "dragstart",
+                event => {
+
+                    this.draggedCard =
+                        card;
+
+
+                    card.classList.add(
+                        "dragging",
+                        "is-dragging"
+                    );
+
+
+                    event.dataTransfer.effectAllowed =
+                        "move";
+
+
+                    event.dataTransfer.setData(
+                        "text/plain",
+                        card.dataset.jobId || ""
+                    );
+
+
+                    document.body.classList.add(
+                        "jobflow-dragging"
+                    );
+
+                }
+            );
+
+
+            /* DRAG END */
+
+            card.addEventListener(
+                "dragend",
+                () => {
+
+                    card.classList.remove(
+                        "dragging",
+                        "is-dragging"
+                    );
+
+
+                    this.clearDropZones();
+
+
+                    this.draggedCard =
+                        null;
+
+
+                    document.body.classList.remove(
+                        "jobflow-dragging"
+                    );
+
+                }
+            );
+
+        });
+
+
+        /* -------------------------------------------------
+           DROP ZONES
+           ------------------------------------------------- */
+
+        dropZones.forEach(zone => {
+
+
+            /* DRAG OVER */
+
+            zone.addEventListener(
+                "dragover",
+                event => {
+
+                    event.preventDefault();
+
+
+                    if (
+                        !this.draggedCard
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    event.dataTransfer.dropEffect =
+                        "move";
+
+
+                    zone.classList.add(
                         "drag-over"
                     );
 
                 }
-
-            }
-        );
+            );
 
 
-        /* =================================================
-           DROP
-           ================================================= */
+            /* DRAG ENTER */
 
-        column.addEventListener(
-            "drop",
-            event => {
+            zone.addEventListener(
+                "dragenter",
+                event => {
 
-                event.preventDefault();
+                    event.preventDefault();
 
-                column.classList.remove(
-                    "drag-over"
-                );
-
-
-                if (!draggedCard) {
-                    return;
-                }
-
-
-                const newStatus =
-                    column.dataset.status;
-
-
-                const oldStatus =
-                    draggedCard
-                        .closest(".kanban-cards")
-                        ?.dataset.status;
-
-
-                if (
-                    !newStatus ||
-                    newStatus === oldStatus
-                ) {
-
-                    return;
+                    zone.classList.add(
+                        "drag-over"
+                    );
 
                 }
+            );
 
 
-                const statusUrl =
-                    draggedCard.dataset.statusUrl;
+            /* DRAG LEAVE */
+
+            zone.addEventListener(
+                "dragleave",
+                event => {
+
+                    if (
+                        !zone.contains(
+                            event.relatedTarget
+                        )
+                    ) {
+
+                        zone.classList.remove(
+                            "drag-over"
+                        );
+
+                    }
+
+                }
+            );
 
 
-                /* Move visually */
+            /* DROP */
 
-                column.appendChild(
-                    draggedCard
-                );
+            zone.addEventListener(
+                "drop",
+                event => {
+
+                    event.preventDefault();
 
 
-                /* Update database */
+                    zone.classList.remove(
+                        "drag-over"
+                    );
 
-                updateJobStatus(
-                    statusUrl,
-                    newStatus,
-                    draggedCard
-                );
 
-            }
-        );
+                    const card =
+                        this.draggedCard;
 
-    });
+
+                    if (!card) {
+
+                        return;
+
+                    }
+
+
+                    /* Determine new status */
+
+                    const newStatus =
+                        zone.dataset.status;
+
+
+                    if (!newStatus) {
+
+                        return;
+
+                    }
+
+
+                    /* Determine old status */
+
+                    const oldContainer =
+                        card.closest(
+                            ".kanban-cards, .pipeline-cards"
+                        );
+
+
+                    const oldStatus =
+                        oldContainer?.dataset.status ||
+                        card.dataset.status ||
+                        "";
+
+
+                    /* Already in same column */
+
+                    if (
+                        oldStatus ===
+                        newStatus
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    /* Store original position */
+
+                    const originalParent =
+                        card.parentElement;
+
+                    const originalNextSibling =
+                        card.nextElementSibling;
+
+
+                    /* Move visually */
+
+                    zone.appendChild(
+                        card
+                    );
+
+
+                    /* Update */
+
+                    const statusUrl =
+                        card.dataset.statusUrl ||
+                        `/jobs/${card.dataset.jobId}/status/`;
+
+
+                    this.updateJobStatus(
+
+                        statusUrl,
+
+                        newStatus,
+
+                        card,
+
+                        originalParent,
+
+                        originalNextSibling
+
+                    );
+
+                }
+            );
+
+        });
+
+
+        /* -------------------------------------------------
+           COLUMN EVENTS
+           ------------------------------------------------- */
+
+        columns.forEach(column => {
+
+            column.addEventListener(
+                "dragover",
+                event => {
+
+                    event.preventDefault();
+
+                }
+            );
+
+        });
+
+
+        /* Initial counts */
+
+        this.updateColumnCounts();
+
+        this.updateKanbanEmptyStates();
+
+    },
 
 
     /* =====================================================
-       UPDATE STATUS
+       6. UPDATE JOB STATUS
        ===================================================== */
 
-    async function updateJobStatus(
+    async updateJobStatus(
         url,
-        status,
-        card
+        newStatus,
+        card,
+        originalParent = null,
+        originalNextSibling = null
     ) {
+
+        if (!url || !newStatus) {
+
+            return;
+
+        }
+
+
+        /* Prevent duplicate updates */
+
+        if (
+            card.dataset.updating ===
+            "true"
+        ) {
+
+            return;
+
+        }
+
+
+        card.dataset.updating =
+            "true";
+
+
+        card.classList.add(
+            "status-updating"
+        );
+
+
+        /* Form data */
 
         const formData =
             new FormData();
 
-
         formData.append(
             "status",
-            status
+            newStatus
         );
 
 
@@ -681,22 +673,33 @@ document.addEventListener("DOMContentLoaded", () => {
                         method: "POST",
 
                         headers: {
+
                             "X-CSRFToken":
-                                getCSRFToken(),
+                                this.getCSRFToken(),
 
                             "X-Requested-With":
-                                "XMLHttpRequest"
+                                "XMLHttpRequest",
+
+                            "Accept":
+                                "application/json"
+
                         },
 
-                        body: formData
+                        body:
+                            formData,
+
+                        credentials:
+                            "same-origin"
                     }
                 );
 
 
+            /* HTTP error */
+
             if (!response.ok) {
 
                 throw new Error(
-                    "Unable to update job."
+                    `Server returned ${response.status}`
                 );
 
             }
@@ -705,6 +708,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const data =
                 await response.json();
 
+
+            /* Django error */
 
             if (!data.success) {
 
@@ -716,106 +721,1661 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            showToast(
-                `Application moved to ${data.status_label}`
+            /* Update local status */
+
+            card.dataset.status =
+                newStatus;
+
+
+            /* Update badge */
+
+            this.updateCardStatusBadge(
+                card,
+                newStatus,
+                data.status_label
             );
 
 
-            updateColumnCounts();
+            /* Update counts */
+
+            this.updateColumnCounts();
+
+            this.updateKanbanEmptyStates();
+
+
+            /* Re-run filters */
+
+            this.filterPipeline();
+
+
+            /* Success message */
+
+            this.showToast(
+
+                `Application moved to ${
+                    data.status_label ||
+                    this.formatStatus(newStatus)
+                }`,
+
+                "success"
+
+            );
 
         }
 
 
         catch (error) {
 
-            console.error(error);
-
-
-            showToast(
-                "Could not update application.",
-                true
+            console.error(
+                "JobFlow status update error:",
+                error
             );
 
 
-            /* Restore page state */
+            /* Restore card */
 
-            setTimeout(
-                () => {
-                    window.location.reload();
-                },
-                800
+            if (
+                originalParent
+            ) {
+
+                if (
+                    originalNextSibling &&
+                    originalNextSibling.parentNode ===
+                    originalParent
+                ) {
+
+                    originalParent.insertBefore(
+                        card,
+                        originalNextSibling
+                    );
+
+                } else {
+
+                    originalParent.appendChild(
+                        card
+                    );
+
+                }
+
+            }
+
+
+            this.showToast(
+                "Could not update the application status. Please try again.",
+                "error"
+            );
+
+
+            this.updateColumnCounts();
+
+            this.updateKanbanEmptyStates();
+
+        }
+
+
+        finally {
+
+            card.dataset.updating =
+                "false";
+
+            card.classList.remove(
+                "status-updating"
             );
 
         }
 
-    }
+    },
 
 
     /* =====================================================
-       CSRF
+       7. UPDATE STATUS BADGE
        ===================================================== */
 
-    function getCSRFToken() {
+    updateCardStatusBadge(
+        card,
+        status,
+        label = null
+    ) {
 
-        const cookies =
-            document.cookie.split(";");
+        const badge =
+            card.querySelector(
+                ".status, .status-badge"
+            );
 
 
-        for (
-            let cookie of cookies
+        if (!badge) {
+
+            return;
+
+        }
+
+
+        /* Remove previous status classes */
+
+        badge.classList.remove(
+
+            "saved",
+            "applied",
+            "screening",
+            "interview",
+            "offer",
+            "rejected",
+
+            "status-saved",
+            "status-applied",
+            "status-screening",
+            "status-interview",
+            "status-offer",
+            "status-rejected"
+
+        );
+
+
+        /* Add new status */
+
+        badge.classList.add(
+            status
+        );
+
+
+        /* Update text */
+
+        if (label) {
+
+            badge.textContent =
+                label;
+
+        }
+
+    },
+
+
+    /* =====================================================
+       8. COLUMN COUNTS
+       ===================================================== */
+
+    updateColumnCounts() {
+
+        const columns =
+            document.querySelectorAll(
+                ".kanban-column, .pipeline-column"
+            );
+
+
+        columns.forEach(column => {
+
+            const container =
+                column.querySelector(
+                    ".kanban-cards, .pipeline-cards"
+                );
+
+
+            if (!container) {
+
+                return;
+
+            }
+
+
+            const cards =
+                container.querySelectorAll(
+                    ".job-card, .kanban-card, .pipeline-card"
+                );
+
+
+            const count =
+                column.querySelector(
+                    ".kanban-count, .pipeline-count"
+                );
+
+
+            if (count) {
+
+                count.textContent =
+                    cards.length;
+
+            }
+
+        });
+
+    },
+
+
+    /* =====================================================
+       9. EMPTY KANBAN COLUMNS
+       ===================================================== */
+
+    updateKanbanEmptyStates() {
+
+        const columns =
+            document.querySelectorAll(
+                ".kanban-column, .pipeline-column"
+            );
+
+
+        columns.forEach(column => {
+
+            const container =
+                column.querySelector(
+                    ".kanban-cards, .pipeline-cards"
+                );
+
+
+            if (!container) {
+
+                return;
+
+            }
+
+
+            const cards =
+                container.querySelectorAll(
+                    ".job-card, .kanban-card, .pipeline-card"
+                );
+
+
+            let emptyState =
+                container.querySelector(
+                    ".kanban-empty.dynamic-empty"
+                );
+
+
+            if (!cards.length) {
+
+                if (!emptyState) {
+
+                    emptyState =
+                        document.createElement(
+                            "div"
+                        );
+
+                    emptyState.className =
+                        "kanban-empty dynamic-empty";
+
+                    emptyState.innerHTML = `
+                        <span>
+                            No applications here yet
+                        </span>
+                    `;
+
+                    container.appendChild(
+                        emptyState
+                    );
+
+                }
+
+            } else {
+
+                if (emptyState) {
+
+                    emptyState.remove();
+
+                }
+
+            }
+
+        });
+
+    },
+
+
+    /* =====================================================
+       10. CLEAR DROP ZONES
+       ===================================================== */
+
+    clearDropZones() {
+
+        document
+            .querySelectorAll(
+                ".drag-over"
+            )
+            .forEach(element => {
+
+                element.classList.remove(
+                    "drag-over"
+                );
+
+            });
+
+    },
+
+
+    /* =====================================================
+       11. PIPELINE SEARCH
+       ===================================================== */
+
+    initPipelineSearch() {
+
+        const searchInput =
+            document.getElementById(
+                "pipelineSearch"
+            );
+
+
+        const filters =
+            document.querySelectorAll(
+                ".pipeline-filter"
+            );
+
+
+        if (
+            !searchInput &&
+            !filters.length
         ) {
 
-            cookie = cookie.trim();
+            return;
+
+        }
 
 
-            if (
-                cookie.startsWith(
-                    "csrftoken="
+        /* Search */
+
+        if (searchInput) {
+
+            searchInput.addEventListener(
+                "input",
+                () => {
+
+                    this.filterPipeline();
+
+                }
+            );
+
+        }
+
+
+        /* Filters */
+
+        filters.forEach(filter => {
+
+            filter.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+
+                    filters.forEach(
+                        button => {
+
+                            button.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+
+                    filter.classList.add(
+                        "active"
+                    );
+
+
+                    this.activePipelineFilter =
+                        filter.dataset.filter ||
+                        "all";
+
+
+                    this.filterPipeline();
+
+                }
+            );
+
+        });
+
+
+        this.filterPipeline();
+
+    },
+
+
+    /* =====================================================
+       12. FILTER PIPELINE
+       ===================================================== */
+
+    filterPipeline() {
+
+        const searchInput =
+            document.getElementById(
+                "pipelineSearch"
+            );
+
+
+        const search =
+            searchInput
+                ? searchInput.value
+                    .toLowerCase()
+                    .trim()
+                : "";
+
+
+        const cards =
+            document.querySelectorAll(
+                ".job-card, .kanban-card, .pipeline-card"
+            );
+
+
+        let visibleCount = 0;
+
+
+        cards.forEach(card => {
+
+            const company =
+                (
+                    card.dataset.company ||
+                    card.querySelector(
+                        ".job-company-name, .job-card-company, .company-name"
+                    )?.textContent ||
+                    ""
                 )
-            ) {
+                .toLowerCase();
 
-                return decodeURIComponent(
-                    cookie.substring(
-                        "csrftoken=".length
-                    )
+
+            const position =
+                (
+                    card.dataset.position ||
+                    card.querySelector(
+                        ".job-position, .position-name"
+                    )?.textContent ||
+                    ""
+                )
+                .toLowerCase();
+
+
+            const status =
+                card.closest(
+                    ".kanban-column, .pipeline-column"
+                )?.dataset.status ||
+                card.dataset.status ||
+                "";
+
+
+            const matchesSearch =
+
+                !search ||
+
+                company.includes(search) ||
+
+                position.includes(search);
+
+
+            const matchesFilter =
+
+                this.activePipelineFilter ===
+                "all" ||
+
+                status ===
+                this.activePipelineFilter;
+
+
+            const visible =
+                matchesSearch &&
+                matchesFilter;
+
+
+            card.style.display =
+                visible ? "" : "none";
+
+
+            if (visible) {
+
+                visibleCount++;
+
+            }
+
+        });
+
+
+        /* Search result indicator */
+
+        const resultCount =
+            document.querySelector(
+                ".pipeline-result-count"
+            );
+
+
+        if (resultCount) {
+
+            resultCount.textContent =
+                `${visibleCount} ${
+                    visibleCount === 1
+                        ? "application"
+                        : "applications"
+                }`;
+
+        }
+
+    },
+
+
+    /* =====================================================
+       13. STATUS FORMATTER
+       ===================================================== */
+
+    formatStatus(status) {
+
+        if (!status) {
+
+            return "Updated";
+
+        }
+
+
+        return status
+            .replace(/[-_]/g, " ")
+            .replace(
+                /\b\w/g,
+                letter =>
+                    letter.toUpperCase()
+            );
+
+    },
+
+
+    /* =====================================================
+       14. DELETE CONFIRMATION
+       ===================================================== */
+
+    initDeleteConfirmation() {
+
+        const deleteButtons =
+            document.querySelectorAll(
+                "[data-delete-confirm], .delete-job-btn"
+            );
+
+
+        deleteButtons.forEach(button => {
+
+            button.addEventListener(
+                "click",
+                event => {
+
+                    const message =
+                        button.dataset.deleteConfirm ||
+                        "Are you sure you want to delete this application? This action cannot be undone.";
+
+
+                    if (
+                        !window.confirm(
+                            message
+                        )
+                    ) {
+
+                        event.preventDefault();
+
+                    }
+
+                }
+            );
+
+        });
+
+    },
+
+
+    /* =====================================================
+       15. BUTTON LOADING STATES
+       ===================================================== */
+
+    initLoadingButtons() {
+
+        const forms =
+            document.querySelectorAll(
+                "form[data-loading-form]"
+            );
+
+
+        forms.forEach(form => {
+
+            form.addEventListener(
+                "submit",
+                () => {
+
+                    const button =
+                        form.querySelector(
+                            "button[type='submit'], input[type='submit']"
+                        );
+
+
+                    if (!button) {
+
+                        return;
+
+                    }
+
+
+                    button.disabled =
+                        true;
+
+
+                    button.classList.add(
+                        "is-loading"
+                    );
+
+
+                    const originalText =
+                        button.innerHTML;
+
+
+                    button.dataset.originalText =
+                        originalText;
+
+
+                    button.innerHTML = `
+
+                        <span
+                            class="button-spinner"
+                            aria-hidden="true"
+                        ></span>
+
+                        Processing...
+
+                    `;
+
+                }
+            );
+
+        });
+
+    },
+
+
+    /* =====================================================
+       16. DISMISSIBLE ALERTS
+       ===================================================== */
+
+    initDismissibleAlerts() {
+
+        const alerts =
+            document.querySelectorAll(
+                ".alert"
+            );
+
+
+        alerts.forEach(alert => {
+
+            const closeButton =
+                alert.querySelector(
+                    ".alert-close"
+                );
+
+
+            if (closeButton) {
+
+                closeButton.addEventListener(
+                    "click",
+                    () => {
+
+                        alert.classList.add(
+                            "alert-closing"
+                        );
+
+
+                        setTimeout(
+                            () => {
+                                alert.remove();
+                            },
+                            250
+                        );
+
+                    }
                 );
 
             }
 
-        }
+        });
 
-
-        return "";
-
-    }
+    },
 
 
     /* =====================================================
-       UPDATE COLUMN COUNTS
+       17. KEYBOARD SHORTCUTS
        ===================================================== */
 
-    function updateColumnCounts() {
+    initKeyboardShortcuts() {
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                /* Don't trigger while typing */
+
+                const tag =
+                    event.target.tagName
+                        ?.toLowerCase();
+
+
+                if (
+                    tag === "input" ||
+                    tag === "textarea" ||
+                    tag === "select"
+                ) {
+
+                    return;
+
+                }
+
+
+                /* N = new job */
+
+                if (
+                    event.key.toLowerCase() ===
+                    "n"
+                ) {
+
+                    const addJob =
+                        document.querySelector(
+                            "a[href*='/jobs/add/']"
+                        );
+
+
+                    if (addJob) {
+
+                        window.location.href =
+                            addJob.href;
+
+                    }
+
+                }
+
+
+                /* Escape closes overlays */
+
+                if (
+                    event.key ===
+                    "Escape"
+                ) {
+
+                    this.clearDropZones();
+
+                    document
+                        .querySelectorAll(
+                            ".jobflow-toast"
+                        )
+                        .forEach(
+                            toast =>
+                                this.removeToast(
+                                    toast
+                                )
+                        );
+
+                }
+
+            }
+        );
+
+    },
+
+
+    /* =====================================================
+       18. DASHBOARD & ANALYTICS CHARTS
+       ===================================================== */
+
+    initCharts() {
+
+        /*
+         * Chart.js is optional.
+         *
+         * If Chart.js isn't loaded, JobFlow
+         * simply continues normally.
+         */
+
+        if (
+            typeof Chart ===
+            "undefined"
+        ) {
+
+            return;
+
+        }
+
+
+        this.initStatusChart();
+
+        this.initPipelineChart();
+
+        this.initTrendChart();
+
+        this.initAnalyticsCharts();
+
+    },
+
+
+    /* =====================================================
+       19. STATUS DOUGHNUT CHART
+       ===================================================== */
+
+    initStatusChart() {
+
+        const canvas =
+            document.getElementById(
+                "statusDistributionChart"
+            );
+
+
+        if (!canvas) {
+
+            return;
+
+        }
+
+
+        const dataElement =
+            document.getElementById(
+                "status-chart-data"
+            );
+
+
+        if (!dataElement) {
+
+            return;
+
+        }
+
+
+        let chartData;
+
+
+        try {
+
+            chartData =
+                JSON.parse(
+                    dataElement.textContent
+                );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Unable to read status chart data.",
+                error
+            );
+
+            return;
+
+        }
+
+
+        const ctx =
+            canvas.getContext("2d");
+
+
+        new Chart(
+            ctx,
+            {
+
+                type: "doughnut",
+
+                data: {
+
+                    labels:
+                        chartData.labels || [],
+
+                    datasets: [
+
+                        {
+
+                            data:
+                                chartData.values || [],
+
+                            backgroundColor: [
+
+                                "#6366f1",
+
+                                "#3b82f6",
+
+                                "#a855f7",
+
+                                "#22c55e",
+
+                                "#14b8a6",
+
+                                "#ef4444"
+
+                            ],
+
+                            borderWidth: 0,
+
+                            hoverOffset: 8
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    cutout: "70%",
+
+                    plugins: {
+
+                        legend: {
+
+                            display: false
+
+                        },
+
+                        tooltip: {
+
+                            padding: 12,
+
+                            cornerRadius: 10,
+
+                            displayColors: true,
+
+                            callbacks: {
+
+                                label:
+                                    context => {
+
+                                        const
+                                            value =
+                                                context.raw;
+
+                                        return ` ${context.label}: ${value}`;
+
+                                    }
+
+                            }
+
+                        }
+
+                    },
+
+                    animation: {
+
+                        duration: 900,
+
+                        easing: "easeOutQuart"
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    },
+
+
+    /* =====================================================
+       20. PIPELINE BAR CHART
+       ===================================================== */
+
+    initPipelineChart() {
+
+        const canvas =
+            document.getElementById(
+                "pipelineChart"
+            );
+
+
+        if (!canvas) {
+
+            return;
+
+        }
+
+
+        const dataElement =
+            document.getElementById(
+                "pipeline-chart-data"
+            );
+
+
+        if (!dataElement) {
+
+            return;
+
+        }
+
+
+        let chartData;
+
+
+        try {
+
+            chartData =
+                JSON.parse(
+                    dataElement.textContent
+                );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Unable to read pipeline chart data.",
+                error
+            );
+
+            return;
+
+        }
+
+
+        const ctx =
+            canvas.getContext("2d");
+
+
+        new Chart(
+            ctx,
+            {
+
+                type: "bar",
+
+                data: {
+
+                    labels:
+                        chartData.labels || [],
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Applications",
+
+                            data:
+                                chartData.values || [],
+
+                            backgroundColor:
+                                "#6366f1",
+
+                            borderRadius: 8,
+
+                            borderSkipped: false,
+
+                            maxBarThickness: 42
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    interaction: {
+
+                        intersect: false,
+
+                        mode: "index"
+
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+
+                                precision: 0,
+
+                                color: "#94a3b8",
+
+                                font: {
+
+                                    size: 11
+
+                                }
+
+                            },
+
+                            grid: {
+
+                                color:
+                                    "rgba(148, 163, 184, 0.14)",
+
+                                drawBorder: false
+
+                            }
+
+                        },
+
+                        x: {
+
+                            ticks: {
+
+                                color: "#64748b",
+
+                                font: {
+
+                                    size: 11,
+
+                                    weight: "600"
+
+                                }
+
+                            },
+
+                            grid: {
+
+                                display: false
+
+                            }
+
+                        }
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display: false
+
+                        },
+
+                        tooltip: {
+
+                            padding: 12,
+
+                            cornerRadius: 10
+
+                        }
+
+                    },
+
+                    animation: {
+
+                        duration: 800,
+
+                        easing: "easeOutQuart"
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    },
+
+
+    /* =====================================================
+       21. APPLICATION TREND CHART
+       ===================================================== */
+
+    initTrendChart() {
+
+        const canvas =
+            document.getElementById(
+                "applicationTrendChart"
+            );
+
+
+        if (!canvas) {
+
+            return;
+
+        }
+
+
+        const dataElement =
+            document.getElementById(
+                "trend-chart-data"
+            );
+
+
+        if (!dataElement) {
+
+            return;
+
+        }
+
+
+        let chartData;
+
+
+        try {
+
+            chartData =
+                JSON.parse(
+                    dataElement.textContent
+                );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Unable to read trend chart data.",
+                error
+            );
+
+            return;
+
+        }
+
+
+        const ctx =
+            canvas.getContext("2d");
+
+
+        const gradient =
+            ctx.createLinearGradient(
+                0,
+                0,
+                0,
+                320
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "rgba(99, 102, 241, 0.20)"
+        );
+
+
+        gradient.addColorStop(
+            1,
+            "rgba(99, 102, 241, 0)"
+        );
+
+
+        new Chart(
+            ctx,
+            {
+
+                type: "line",
+
+                data: {
+
+                    labels:
+                        chartData.labels || [],
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Applications",
+
+                            data:
+                                chartData.values || [],
+
+                            borderColor:
+                                "#6366f1",
+
+                            backgroundColor:
+                                gradient,
+
+                            fill: true,
+
+                            tension: 0.4,
+
+                            borderWidth: 3,
+
+                            pointRadius: 4,
+
+                            pointHoverRadius: 7,
+
+                            pointBackgroundColor:
+                                "#ffffff",
+
+                            pointBorderColor:
+                                "#6366f1",
+
+                            pointBorderWidth: 2
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    interaction: {
+
+                        intersect: false,
+
+                        mode: "index"
+
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+
+                                precision: 0,
+
+                                color: "#94a3b8"
+
+                            },
+
+                            grid: {
+
+                                color:
+                                    "rgba(148, 163, 184, 0.12)",
+
+                                drawBorder: false
+
+                            }
+
+                        },
+
+                        x: {
+
+                            ticks: {
+
+                                color: "#64748b"
+
+                            },
+
+                            grid: {
+
+                                display: false
+
+                            }
+
+                        }
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display: false
+
+                        },
+
+                        tooltip: {
+
+                            padding: 12,
+
+                            cornerRadius: 10,
+
+                            displayColors: false
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    },
+
+
+    /* =====================================================
+       22. ANALYTICS CHARTS
+       ===================================================== */
+
+    initAnalyticsCharts() {
+
+        const canvases =
+            document.querySelectorAll(
+                "[data-chart]"
+            );
+
+
+        canvases.forEach(canvas => {
+
+            /*
+             * Allows future analytics pages
+             * to declare charts through:
+             *
+             * data-chart="bar"
+             * data-chart="line"
+             * data-chart="doughnut"
+             */
+
+            const type =
+                canvas.dataset.chart;
+
+
+            const dataId =
+                canvas.dataset.chartData;
+
+
+            if (
+                !type ||
+                !dataId
+            ) {
+
+                return;
+
+            }
+
+
+            const dataElement =
+                document.getElementById(
+                    dataId
+                );
+
+
+            if (!dataElement) {
+
+                return;
+
+            }
+
+
+            let chartData;
+
+
+            try {
+
+                chartData =
+                    JSON.parse(
+                        dataElement.textContent
+                    );
+
+            }
+
+            catch {
+
+                return;
+
+            }
+
+
+            const ctx =
+                canvas.getContext("2d");
+
+
+            const config = {
+
+                type: type,
+
+                data: {
+
+                    labels:
+                        chartData.labels || [],
+
+                    datasets:
+                        chartData.datasets || []
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            labels: {
+
+                                usePointStyle: true,
+
+                                padding: 18
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            };
+
+
+            new Chart(
+                ctx,
+                config
+            );
+
+        });
+
+    },
+
+
+    /* =====================================================
+       23. MOBILE NAVIGATION
+       ===================================================== */
+
+    initMobileNavigation() {
+
+        const toggle =
+            document.querySelector(
+                "[data-sidebar-toggle]"
+            );
+
+
+        const sidebar =
+            document.querySelector(
+                ".jobflow-sidebar"
+            );
+
+
+        if (
+            !toggle ||
+            !sidebar
+        ) {
+
+            return;
+
+        }
+
+
+        toggle.addEventListener(
+            "click",
+            () => {
+
+                document.body.classList.toggle(
+                    "sidebar-open"
+                );
+
+            }
+        );
+
+
+        /* Close sidebar after navigation */
+
+        sidebar
+            .querySelectorAll(
+                "a"
+            )
+            .forEach(link => {
+
+                link.addEventListener(
+                    "click",
+                    () => {
+
+                        document.body.classList.remove(
+                            "sidebar-open"
+                        );
+
+                    }
+                );
+
+            });
+
+    },
+
+
+    /* =====================================================
+       24. AUTO FOCUS
+       ===================================================== */
+
+    initAutoFocus() {
+
+        const autofocus =
+            document.querySelector(
+                "[autofocus]"
+            );
+
+
+        if (
+            autofocus &&
+            window.innerWidth > 650
+        ) {
+
+            setTimeout(
+                () => {
+
+                    autofocus.focus();
+
+                },
+                150
+            );
+
+        }
+
+    },
+
+
+    /* =====================================================
+       25. EXTERNAL LINKS
+       ===================================================== */
+
+    initExternalLinks() {
 
         document
-            .querySelectorAll(".kanban-column")
-            .forEach(column => {
+            .querySelectorAll(
+                'a[target="_blank"]'
+            )
+            .forEach(link => {
 
-                const cards =
-                    column.querySelectorAll(
-                        ".job-card"
+                const currentRel =
+                    link.getAttribute(
+                        "rel"
+                    ) || "";
+
+
+                if (
+                    !currentRel.includes(
+                        "noopener"
+                    )
+                ) {
+
+                    link.setAttribute(
+                        "rel",
+                        `${currentRel} noopener noreferrer`.trim()
                     );
-
-
-                const count =
-                    column.querySelector(
-                        ".kanban-count"
-                    );
-
-
-                if (count) {
-
-                    count.textContent =
-                        cards.length;
 
                 }
 
@@ -823,204 +2383,112 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
-    /* =====================================================
-       TOAST
-       ===================================================== */
-
-    function showToast(
-        message,
-        error = false
-    ) {
-
-        const oldToast =
-            document.querySelector(
-                ".jobflow-toast"
-            );
+};
 
 
-        if (oldToast) {
-            oldToast.remove();
-        }
+/* =========================================================
+   26. DOM READY
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        JobFlow.init();
+
+    }
+);
 
 
-        const toast =
-            document.createElement(
-                "div"
-            );
+/* =========================================================
+   27. GLOBAL HELPERS
+   =========================================================
+
+   These aliases allow existing templates or older
+   scripts to continue working.
+
+   ========================================================= */
+
+function updateJobStatus(
+    url,
+    status,
+    card = null
+) {
+
+    const targetCard =
+        card ||
+        JobFlow.draggedCard;
 
 
-        toast.className =
-            "jobflow-toast";
+    if (!targetCard) {
 
-
-        if (error) {
-
-            toast.classList.add(
-                "error"
-            );
-
-        }
-
-
-        toast.innerHTML = `
-
-            <span class="toast-icon">
-
-                ${error ? "!" : "✓"}
-
-            </span>
-
-            <span>
-                ${message}
-            </span>
-
-        `;
-
-
-        document.body.appendChild(
-            toast
-        );
-
-
-        setTimeout(
-            () => {
-
-                toast.classList.add(
-                    "hide"
-                );
-
-
-                setTimeout(
-                    () => toast.remove(),
-                    300
-                );
-
-            },
-            2500
-        );
+        return;
 
     }
 
-});
+
+    JobFlow.updateJobStatus(
+        url,
+        status,
+        targetCard
+    );
+
+}
+
+
+function showJobFlowToast(
+    message,
+    error = false
+) {
+
+    JobFlow.showToast(
+        message,
+        error
+            ? "error"
+            : "success"
+    );
+
+}
+
+
+function showToast(
+    message,
+    error = false
+) {
+
+    JobFlow.showToast(
+        message,
+        error
+            ? "error"
+            : "success"
+    );
+
+}
+
 
 /* =========================================================
-   PIPELINE SEARCH & FILTERS
+   28. PAGE VISIBILITY
    ========================================================= */
 
-const pipelineSearch =
-    document.getElementById(
-        "pipelineSearch"
-    );
-
-
-const pipelineFilters =
-    document.querySelectorAll(
-        ".pipeline-filter"
-    );
-
-
-let activePipelineFilter = "all";
-
-
-function filterPipeline() {
-
-    const search =
-        pipelineSearch
-            ? pipelineSearch.value
-                .toLowerCase()
-                .trim()
-            : "";
-
-
-    const cards =
-        document.querySelectorAll(
-            ".job-card"
-        );
-
-
-    cards.forEach(card => {
-
-        const company =
-            card.dataset.company || "";
-
-
-        const position =
-            card.dataset.position || "";
-
-
-        const status =
-            card
-                .closest(".kanban-column")
-                ?.dataset.status || "";
-
-
-        const matchesSearch =
-            !search ||
-            company.includes(search) ||
-            position.includes(search);
-
-
-        const matchesFilter =
-            activePipelineFilter === "all" ||
-            status === activePipelineFilter;
-
+document.addEventListener(
+    "visibilitychange",
+    () => {
 
         if (
-            matchesSearch &&
-            matchesFilter
+            document.hidden
         ) {
 
-            card.style.display = "";
+            document.body.classList.add(
+                "page-hidden"
+            );
 
         } else {
 
-            card.style.display = "none";
+            document.body.classList.remove(
+                "page-hidden"
+            );
 
         }
 
-    });
-
-}
-
-
-if (pipelineSearch) {
-
-    pipelineSearch.addEventListener(
-        "input",
-        filterPipeline
-    );
-
-}
-
-
-pipelineFilters.forEach(filter => {
-
-    filter.addEventListener(
-        "click",
-        () => {
-
-            pipelineFilters.forEach(
-                button => {
-                    button.classList.remove(
-                        "active"
-                    );
-                }
-            );
-
-
-            filter.classList.add(
-                "active"
-            );
-
-
-            activePipelineFilter =
-                filter.dataset.filter;
-
-
-            filterPipeline();
-
-        }
-    );
-
-});
+    }
+);

@@ -1,0 +1,584 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics | JobFlow{% endblock %}
+
+{% block page_heading %}
+Analytics
+{% endblock %}
+
+{% block page_description %}
+Understand your job search performance.
+{% endblock %}
+
+{% block topbar_actions %} <a href="{% url 'add_job' %}" class="btn btn-primary"> <span>＋</span>
+Add Job </a>
+
+<div class="profile">
+    <div class="profile-avatar">U</div>
+
+```
+<div>
+    <div class="profile-name">Job Seeker</div>
+    <div class="profile-role">JobFlow User</div>
+</div>
+```
+
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-container analytics-page">
+
+```
+<!-- =========================================
+     ANALYTICS HERO
+========================================== -->
+
+<section class="analytics-hero">
+
+    <div class="analytics-hero-content">
+
+        <div class="analytics-hero-copy">
+
+            <span class="eyebrow">
+                JOB SEARCH INTELLIGENCE
+            </span>
+
+            <h2>
+                Your search at a glance
+            </h2>
+
+            <p>
+                Track application volume, pipeline movement,
+                interview performance and your overall conversion journey.
+            </p>
+
+        </div>
+
+        <div class="analytics-hero-icon">
+            ↗
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     KEY METRICS
+========================================== -->
+
+<section class="analytics-grid">
+
+    <div class="analytics-card">
+
+        <div class="analytics-card-top">
+
+            <div class="analytics-card-icon">
+                ▣
+            </div>
+
+            <span>
+                TOTAL APPLICATIONS
+            </span>
+
+        </div>
+
+        <strong>
+            {{ total_jobs }}
+        </strong>
+
+        <small>
+            Opportunities tracked
+        </small>
+
+    </div>
+
+
+    <div class="analytics-card">
+
+        <div class="analytics-card-top">
+
+            <div class="analytics-card-icon">
+                ↗
+            </div>
+
+            <span>
+                APPLICATIONS SENT
+            </span>
+
+        </div>
+
+        <strong>
+            {{ applied }}
+        </strong>
+
+        <small>
+            Active applications
+        </small>
+
+    </div>
+
+
+    <div class="analytics-card">
+
+        <div class="analytics-card-top">
+
+            <div class="analytics-card-icon">
+                ◷
+            </div>
+
+            <span>
+                INTERVIEWS
+            </span>
+
+        </div>
+
+        <strong>
+            {{ interviews }}
+        </strong>
+
+        <small>
+            Interview opportunities
+        </small>
+
+    </div>
+
+
+    <div class="analytics-card analytics-card-success">
+
+        <div class="analytics-card-top">
+
+            <div class="analytics-card-icon">
+                ✓
+            </div>
+
+            <span>
+                OFFERS
+            </span>
+
+        </div>
+
+        <strong>
+            {{ offers }}
+        </strong>
+
+        <small>
+            Successful outcomes
+        </small>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     CHART ROW
+========================================== -->
+
+<section class="analytics-chart-grid">
+
+
+    <!-- APPLICATION DISTRIBUTION -->
+
+    <div class="panel analytics-chart-panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    Application Distribution
+                </div>
+
+                <div class="panel-subtitle">
+                    Current status of your opportunities
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="analytics-chart-wrapper">
+
+            <canvas id="statusDistributionChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- PIPELINE PERFORMANCE -->
+
+    <div class="panel analytics-chart-panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    Pipeline Performance
+                </div>
+
+                <div class="panel-subtitle">
+                    Opportunities across each stage
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="analytics-chart-wrapper">
+
+            <canvas id="pipelineChart"></canvas>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     CONVERSION PERFORMANCE
+========================================== -->
+
+<section class="panel analytics-panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <div class="panel-title">
+                Conversion Performance
+            </div>
+
+            <div class="panel-subtitle">
+                How opportunities progress through your pipeline
+            </div>
+
+        </div>
+
+        <div class="analytics-panel-badge">
+            Performance
+        </div>
+
+    </div>
+
+
+    <div class="conversion-list">
+
+
+        <!-- APPLICATION → INTERVIEW -->
+
+        <div class="conversion-row">
+
+            <div class="conversion-info">
+
+                <div class="conversion-label">
+
+                    <span class="conversion-icon">
+                        ◷
+                    </span>
+
+                    <strong>
+                        Application → Interview
+                    </strong>
+
+                </div>
+
+                <span class="conversion-percentage">
+                    {{ interview_rate }}%
+                </span>
+
+            </div>
+
+
+            <div class="conversion-track">
+
+                <div
+                    class="conversion-fill"
+                    style="width: {{ interview_rate }}%;"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- APPLICATION → OFFER -->
+
+        <div class="conversion-row">
+
+            <div class="conversion-info">
+
+                <div class="conversion-label">
+
+                    <span class="conversion-icon">
+                        ✓
+                    </span>
+
+                    <strong>
+                        Application → Offer
+                    </strong>
+
+                </div>
+
+                <span class="conversion-percentage">
+                    {{ offer_rate }}%
+                </span>
+
+            </div>
+
+
+            <div class="conversion-track">
+
+                <div
+                    class="conversion-fill conversion-fill-success"
+                    style="width: {{ offer_rate }}%;"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     PIPELINE BREAKDOWN
+========================================== -->
+
+<section class="panel analytics-panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <div class="panel-title">
+                Pipeline Breakdown
+            </div>
+
+            <div class="panel-subtitle">
+                Current distribution of your opportunities
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="analytics-breakdown">
+
+
+        <div class="breakdown-item">
+
+            <span class="breakdown-dot saved"></span>
+
+            <div>
+                <span>Saved</span>
+                <strong>{{ saved }}</strong>
+            </div>
+
+        </div>
+
+
+        <div class="breakdown-item">
+
+            <span class="breakdown-dot applied"></span>
+
+            <div>
+                <span>Applied</span>
+                <strong>{{ applied }}</strong>
+            </div>
+
+        </div>
+
+
+        <div class="breakdown-item">
+
+            <span class="breakdown-dot screening"></span>
+
+            <div>
+                <span>Screening</span>
+                <strong>{{ screening }}</strong>
+            </div>
+
+        </div>
+
+
+        <div class="breakdown-item">
+
+            <span class="breakdown-dot interview"></span>
+
+            <div>
+                <span>Interview</span>
+                <strong>{{ interviews }}</strong>
+            </div>
+
+        </div>
+
+
+        <div class="breakdown-item">
+
+            <span class="breakdown-dot offer"></span>
+
+            <div>
+                <span>Offer</span>
+                <strong>{{ offers }}</strong>
+            </div>
+
+        </div>
+
+
+        <div class="breakdown-item">
+
+            <span class="breakdown-dot rejected"></span>
+
+            <div>
+                <span>Rejected</span>
+                <strong>{{ rejected }}</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     APPLICATION TREND
+========================================== -->
+
+<section class="panel analytics-panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <div class="panel-title">
+                Application Activity
+            </div>
+
+            <div class="panel-subtitle">
+                Track how consistently you are applying
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="analytics-trend-chart">
+
+        <canvas id="applicationTrendChart"></canvas>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     SEARCH INSIGHTS
+========================================== -->
+
+<section class="analytics-insights-grid">
+
+
+    <div class="analytics-insight-card">
+
+        <div class="insight-icon">
+            ⚡
+        </div>
+
+        <div>
+
+            <span class="insight-label">
+                SEARCH MOMENTUM
+            </span>
+
+            <h3>
+                Keep the momentum going
+            </h3>
+
+            <p>
+                Consistent applications increase the number
+                of opportunities entering your pipeline.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="analytics-insight-card">
+
+        <div class="insight-icon">
+            🎯
+        </div>
+
+        <div>
+
+            <span class="insight-label">
+                INTERVIEW RATE
+            </span>
+
+            <h3>
+                {{ interview_rate }}% conversion
+            </h3>
+
+            <p>
+                Your interview conversion shows how effectively
+                your applications are progressing.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="analytics-insight-card">
+
+        <div class="insight-icon">
+                ★
+        </div>
+
+        <div>
+
+            <span class="insight-label">
+                SUCCESS RATE
+            </span>
+
+            <h3>
+                {{ offer_rate }}% offer conversion
+            </h3>
+
+            <p>
+                Track this number over time to understand
+                the effectiveness of your job search strategy.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+```
+
+</div>
+
+<!-- =========================================
+     CHART DATA
+========================================== -->
+
+{{ status_chart|json_script:"status-chart-data" }}
+
+{{ pipeline_chart|json_script:"pipeline-chart-data" }}
+
+{{ trend_chart|json_script:"trend-chart-data" }}
+
+{% endblock %}

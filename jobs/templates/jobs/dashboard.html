@@ -1,789 +1,694 @@
-{% load static %}
+{% extends "base.html" %}
 
-<!DOCTYPE html>
+{% block title %}
+    JobFlow | Dashboard
+{% endblock %}
 
-<html lang="en">
+{% block page_heading %}
+    Dashboard
+{% endblock %}
 
-<head>
+{% block page_description %}
+    Your central workspace for tracking applications, interviews and career opportunities.
+{% endblock %}
 
-    <meta charset="UTF-8">
+{% block topbar_actions %}
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
+    <button
+        class="icon-button"
+        type="button"
+        title="Notifications"
+        aria-label="Notifications"
     >
+        🔔
+    </button>
 
-    <title>JobFlow | Dashboard</title>
+    <div class="profile">
 
-    <link
-        rel="stylesheet"
-        href="{% static 'css/jobflow.css' %}"
+        <div class="profile-avatar">
+            U
+        </div>
+
+        <div class="profile-info">
+
+            <div class="profile-name">
+                Job Seeker
+            </div>
+
+            <div class="profile-role">
+                JobFlow User
+            </div>
+
+        </div>
+
+    </div>
+
+    <a
+        href="{% url 'add_job' %}"
+        class="btn btn-primary"
     >
+        ＋ Add Job
+    </a>
 
-</head>
-
-
-<body>
-
-
-<div class="jobflow-layout">
+{% endblock %}
 
 
-    <!-- ==========================================
-         SIDEBAR
-         ========================================== -->
+{% block content %}
 
-    <aside class="jobflow-sidebar">
+<div class="page-container dashboard-page">
 
 
-        <div class="jobflow-logo">
-            Job<span>Flow</span>
+    <!-- ==================================================
+         WELCOME HEADER
+         ================================================== -->
+
+    <section class="dashboard-welcome">
+
+        <div>
+
+            <span class="eyebrow">
+                JOB SEARCH OVERVIEW
+            </span>
+
+            <h2>
+                Welcome back 👋
+            </h2>
+
+            <p>
+                Here's a snapshot of how your job search is progressing.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'add_job' %}"
+            class="btn btn-primary"
+        >
+            ＋ Track New Opportunity
+        </a>
+
+    </section>
+
+
+    <!-- ==================================================
+         STATISTICS
+         ================================================== -->
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-header">
+
+                <span class="stat-title">
+                    TOTAL APPLICATIONS
+                </span>
+
+                <div class="stat-icon primary">
+                    ▣
+                </div>
+
+            </div>
+
+            <div class="stat-number">
+                {{ total_jobs }}
+            </div>
+
+            <div class="stat-footer">
+                All tracked opportunities
+            </div>
+
         </div>
 
 
-        <div class="sidebar-section">
+        <div class="stat-card">
 
+            <div class="stat-header">
 
-            <div class="sidebar-title">
-                Workspace
+                <span class="stat-title">
+                    APPLICATIONS SENT
+                </span>
+
+                <div class="stat-icon info">
+                    ↑
+                </div>
+
             </div>
 
+            <div class="stat-number">
+                {{ applied }}
+            </div>
 
-            <!-- DASHBOARD -->
+            <div class="stat-footer">
+                Applications submitted
+            </div>
 
-            <a
-                href="{% url 'dashboard' %}"
-                class="sidebar-link active"
-            >
+        </div>
 
-                <span class="sidebar-icon">
-                    ⌂
+
+        <div class="stat-card">
+
+            <div class="stat-header">
+
+                <span class="stat-title">
+                    INTERVIEWS
                 </span>
 
-                <span>
-                    Dashboard
-                </span>
-
-            </a>
-
-
-            <!-- APPLICATIONS -->
-
-            <a
-                href="{% url 'applications' %}"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ▣
-                </span>
-
-                <span>
-                    Applications
-                </span>
-
-            </a>
-
-
-            <!-- INTERVIEWS -->
-
-            <a
-                href="{% url 'applications' %}?status=interview"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
+                <div class="stat-icon success">
                     ◷
+                </div>
+
+            </div>
+
+            <div class="stat-number">
+                {{ interviews }}
+            </div>
+
+            <div class="stat-footer">
+                Active interview opportunities
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-header">
+
+                <span class="stat-title">
+                    OFFERS
                 </span>
 
-                <span>
-                    Interviews
-                </span>
+                <div class="stat-icon warning">
+                    ★
+                </div>
 
-            </a>
+            </div>
 
+            <div class="stat-number">
+                {{ offers }}
+            </div>
 
-            <!-- ANALYTICS -->
+            <div class="stat-footer">
+                Successful opportunities
+            </div>
 
-            <a
-                href="{% url 'pipeline' %}"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ↗
-                </span>
-
-                <span>
-                    Analytics
-                </span>
-
-            </a>
+        </div>
 
 
-            <!-- PIPELINE -->
-            <a
-                href="{% url 'applications' %}"
-                class="sidebar-link"
-            >
+    </section>
+
+
+    <!-- ==================================================
+         ANALYTICS ROW
+         ================================================== -->
+
+    <section class="dashboard-chart-grid">
+
+
+        <!-- PIPELINE BAR CHART -->
+
+        <div class="panel dashboard-chart-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-title">
+                        Application Pipeline
+                    </div>
+
+                    <div class="panel-subtitle">
+                        Number of opportunities at each stage.
+                    </div>
+
+                </div>
+
                 <a
                     href="{% url 'pipeline' %}"
-                    class="sidebar-link"
+                    class="panel-link"
                 >
-
-                    <span class="sidebar-icon">
-                        ◫
-                    </span>
-
-                    <span>
-                        Pipeline
-                    </span>
-
+                    View Pipeline →
                 </a>
 
+            </div>
+
+
+            <div class="dashboard-chart-container">
+
+                <div class="dashboard-bar-chart">
+
+                    <div class="bar-chart-item">
+
+                        <div class="bar-value">
+                            {{ saved }}
+                        </div>
+
+                        <div
+                            class="bar"
+                            style="height:
+                            {% if total_jobs %}
+                                calc({{ saved }} / {{ total_jobs }} * 100%);
+                            {% else %}
+                                4%;
+                            {% endif %}"
+                        ></div>
+
+                        <span>
+                            Saved
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-chart-item">
+
+                        <div class="bar-value">
+                            {{ applied }}
+                        </div>
+
+                        <div
+                            class="bar"
+                            style="height:
+                            {% if total_jobs %}
+                                calc({{ applied }} / {{ total_jobs }} * 100%);
+                            {% else %}
+                                4%;
+                            {% endif %}"
+                        ></div>
+
+                        <span>
+                            Applied
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-chart-item">
+
+                        <div class="bar-value">
+                            {{ screening }}
+                        </div>
+
+                        <div
+                            class="bar"
+                            style="height:
+                            {% if total_jobs %}
+                                calc({{ screening }} / {{ total_jobs }} * 100%);
+                            {% else %}
+                                4%;
+                            {% endif %}"
+                        ></div>
+
+                        <span>
+                            Screening
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-chart-item">
+
+                        <div class="bar-value">
+                            {{ interviews }}
+                        </div>
+
+                        <div
+                            class="bar"
+                            style="height:
+                            {% if total_jobs %}
+                                calc({{ interviews }} / {{ total_jobs }} * 100%);
+                            {% else %}
+                                4%;
+                            {% endif %}"
+                        ></div>
+
+                        <span>
+                            Interviews
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-chart-item">
+
+                        <div class="bar-value">
+                            {{ offers }}
+                        </div>
+
+                        <div
+                            class="bar"
+                            style="height:
+                            {% if total_jobs %}
+                                calc({{ offers }} / {{ total_jobs }} * 100%);
+                            {% else %}
+                                4%;
+                            {% endif %}"
+                        ></div>
+
+                        <span>
+                            Offers
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-chart-item">
+
+                        <div class="bar-value">
+                            {{ rejected }}
+                        </div>
+
+                        <div
+                            class="bar rejected-bar"
+                            style="height:
+                            {% if total_jobs %}
+                                calc({{ rejected }} / {{ total_jobs }} * 100%);
+                            {% else %}
+                                4%;
+                            {% endif %}"
+                        ></div>
+
+                        <span>
+                            Rejected
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
 
+        <!-- PIE CHART -->
 
-        <!-- MANAGEMENT -->
+        <div class="panel dashboard-chart-panel">
 
-        <div class="sidebar-section">
+            <div class="panel-header">
 
+                <div>
 
-            <div class="sidebar-title">
-                Management
-            </div>
-
-
-            <!-- ADD JOB -->
-
-            <a
-                href="{% url 'add_job' %}"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ＋
-                </span>
-
-                <span>
-                    Add Job
-                </span>
-
-            </a>
-
-
-            <!-- SAVED JOBS -->
-
-            <a
-                href="{% url 'applications' %}?status=saved"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ★
-                </span>
-
-                <span>
-                    Saved Jobs
-                </span>
-
-            </a>
-
-
-        </div>
-
-
-
-        <!-- SIDEBAR BOTTOM -->
-
-        <div class="sidebar-bottom">
-
-
-            <a
-                href="#"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ⚙
-                </span>
-
-                <span>
-                    Settings
-                </span>
-
-            </a>
-
-
-            <a
-                href="#"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ?
-                </span>
-
-                <span>
-                    Help Center
-                </span>
-
-            </a>
-
-
-        </div>
-
-
-    </aside>
-
-
-
-    <!-- ==========================================
-         MAIN CONTENT
-         ========================================== -->
-
-    <main class="jobflow-main">
-
-
-        <!-- ==========================================
-             TOP BAR
-             ========================================== -->
-
-        <div class="jobflow-topbar">
-
-
-            <div class="page-title">
-
-                <h1>
-                    Dashboard
-                </h1>
-
-                <p>
-                    Your central workspace for tracking
-                    applications, interviews and career opportunities.
-                </p>
-
-            </div>
-
-
-            <div class="topbar-actions">
-
-
-                <button
-                    class="icon-button"
-                    title="Notifications"
-                >
-                    🔔
-                </button>
-
-
-                <div class="profile">
-
-
-                    <div class="profile-avatar">
-                        U
+                    <div class="panel-title">
+                        Application Distribution
                     </div>
 
+                    <div class="panel-subtitle">
+                        How your opportunities are distributed.
+                    </div>
 
-                    <div>
+                </div>
 
-                        <div class="profile-name">
-                            Job Seeker
-                        </div>
+            </div>
 
-                        <div class="profile-role">
-                            JobFlow User
+
+            <div class="pie-chart-wrapper">
+
+                {% if total_jobs %}
+
+                    <div
+                        class="css-pie-chart"
+                        style="
+                            --saved: {{ saved }};
+                            --applied: {{ applied }};
+                            --screening: {{ screening }};
+                            --interview: {{ interviews }};
+                            --offer: {{ offers }};
+                            --rejected: {{ rejected }};
+                            --total: {{ total_jobs }};
+                        "
+                    >
+
+                        <div class="pie-chart-center">
+
+                            <strong>
+                                {{ total_jobs }}
+                            </strong>
+
+                            <span>
+                                Total
+                            </span>
+
                         </div>
 
                     </div>
 
+                {% else %}
 
-                </div>
+                    <div class="pie-chart-empty">
 
-
-                <a
-                    href="{% url 'add_job' %}"
-                    class="btn btn-primary"
-                >
-
-                    ＋ Add Job
-
-                </a>
-
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- ==========================================
-             STATISTICS
-             ========================================== -->
-
-        <section class="stats-grid">
-
-
-            <!-- TOTAL -->
-
-            <div class="stat-card">
-
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        TOTAL APPLICATIONS
-                    </span>
-
-                    <div class="stat-icon primary">
-                        ▣
-                    </div>
-
-                </div>
-
-
-                <div class="stat-number">
-                    {{ total_jobs }}
-                </div>
-
-
-                <div class="stat-footer">
-                    All tracked opportunities
-                </div>
-
-
-            </div>
-
-
-
-            <!-- INTERVIEWS -->
-
-            <div class="stat-card">
-
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        INTERVIEWS
-                    </span>
-
-                    <div class="stat-icon success">
-                        ◷
-                    </div>
-
-                </div>
-
-
-                <div class="stat-number">
-                    {{ interviews }}
-                </div>
-
-
-                <div class="stat-footer">
-                    Active interview opportunities
-                </div>
-
-
-            </div>
-
-
-
-            <!-- REJECTED -->
-
-            <div class="stat-card">
-
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        REJECTED
-                    </span>
-
-                    <div class="stat-icon danger">
-                        ×
-                    </div>
-
-                </div>
-
-
-                <div class="stat-number">
-                    {{ rejected }}
-                </div>
-
-
-                <div class="stat-footer">
-                    Opportunities not progressed
-                </div>
-
-
-            </div>
-
-
-
-            <!-- OFFERS -->
-
-            <div class="stat-card">
-
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        OFFERS
-                    </span>
-
-                    <div class="stat-icon warning">
-                        ★
-                    </div>
-
-                </div>
-
-
-                <div class="stat-number">
-                    {{ offers }}
-                </div>
-
-
-                <div class="stat-footer">
-                    Successful opportunities
-                </div>
-
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- ==========================================
-             DASHBOARD PANELS
-             ========================================== -->
-
-        <section class="dashboard-grid">
-
-
-            <!-- ======================================
-                 APPLICATION ACTIVITY
-                 ====================================== -->
-
-            <div class="panel">
-
-
-                <div class="panel-header">
-
-
-                    <div>
-
-                        <div class="panel-title">
-                            Application Activity
-                        </div>
-
-                        <div class="panel-subtitle">
-                            Monitor your application progress
-                        </div>
-
-                    </div>
-
-
-                    <span class="status applied">
-                        This Month
-                    </span>
-
-
-                </div>
-
-
-                <div class="chart-area">
-
-                    <div>
-
-                        <div style="
-                            text-align:center;
-                            font-size:32px;
-                            margin-bottom:8px;
-                        ">
+                        <span>
                             📊
-                        </div>
+                        </span>
+
+                        <strong>
+                            No data yet
+                        </strong>
+
+                        <small>
+                            Add your first opportunity
+                        </small>
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="pie-legend">
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot saved"></span>
+
+                        <span>
+                            Saved
+                        </span>
+
+                        <strong>
+                            {{ saved }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot applied"></span>
+
+                        <span>
+                            Applied
+                        </span>
+
+                        <strong>
+                            {{ applied }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot screening"></span>
+
+                        <span>
+                            Screening
+                        </span>
+
+                        <strong>
+                            {{ screening }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot interview"></span>
+
+                        <span>
+                            Interview
+                        </span>
+
+                        <strong>
+                            {{ interviews }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot offer"></span>
+
+                        <span>
+                            Offers
+                        </span>
+
+                        <strong>
+                            {{ offers }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot rejected"></span>
+
+                        <span>
+                            Rejected
+                        </span>
+
+                        <strong>
+                            {{ rejected }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ==================================================
+         PERFORMANCE + FUNNEL
+         ================================================== -->
+
+    <section class="dashboard-performance-grid">
+
+
+        <!-- CONVERSION -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-title">
+                        Application Performance
+                    </div>
+
+                    <div class="panel-subtitle">
+                        Understand how your applications are progressing.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel-body">
+
+
+                <div class="performance-metric">
+
+                    <div class="performance-header">
+
+                        <span>
+                            Interview Conversion
+                        </span>
+
+                        <strong>
+                            {{ interview_rate }}%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="progress-track large">
+
+                        <div
+                            class="progress-fill"
+                            style="width: {{ interview_rate }}%;"
+                        ></div>
+
+                    </div>
+
+
+                    <p>
+                        Percentage of tracked opportunities that
+                        reached the interview stage.
+                    </p>
+
+                </div>
+
+
+                <div class="performance-divider"></div>
+
+
+                <div class="mini-metrics">
+
+
+                    <div class="mini-metric">
+
+                        <span class="mini-metric-icon">
+                            ↑
+                        </span>
 
                         <div>
-                            <div class="dashboard-activity">
 
-                                <div class="activity-summary">
+                            <strong>
+                                {{ applied }}
+                            </strong>
 
-                                    <div>
-
-                                        <strong>
-                                            {{ total_jobs }}
-                                        </strong>
-
-                                        <span>
-                                            Total tracked
-                                        </span>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <strong>
-                                            {{ applied }}
-                                        </strong>
-
-                                        <span>
-                                            Applications sent
-                                        </span>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <strong>
-                                            {{ interviews }}
-                                        </strong>
-
-                                        <span>
-                                            Interviews
-                                        </span>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <strong>
-                                            {{ offers }}
-                                        </strong>
-
-                                        <span>
-                                            Offers
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-
-                                <div class="activity-progress">
-
-                                    <div class="progress-header">
-
-                                        <span>
-                                            Application progress
-                                        </span>
-
-                                        <strong>
-                                            {{ interview_rate }}%
-                                        </strong>
-
-                                    </div>
-
-
-                                    <div class="progress-track">
-
-                                        <div
-                                            class="progress-fill"
-                                            style="width: {{ interview_rate }}%;"
-                                        ></div>
-
-                                    </div>
-
-
-                                    <p>
-                                        Percentage of tracked opportunities
-                                        that reached the interview stage.
-                                    </p>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- ======================================
-                 APPLICATION PIPELINE
-                 ====================================== -->
-
-            <div class="panel">
-
-
-                <div class="panel-header">
-
-                    <div>
-
-                        <div class="panel-title">
-                            Application Pipeline
-                        </div>
-
-                        <div class="panel-subtitle">
-                            Current application status
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="panel-body">
-
-
-                    <!-- SAVED -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#d97706"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Saved
+                            <span>
+                                Applications
                             </span>
 
                         </div>
 
-                        <span class="pipeline-count">
-                            {{ saved }}
-                        </span>
-
                     </div>
 
 
+                    <div class="mini-metric">
 
-                    <!-- APPLIED -->
+                        <span class="mini-metric-icon">
+                            ◷
+                        </span>
 
-                    <div class="pipeline-item">
+                        <div>
 
-                        <div class="pipeline-left">
+                            <strong>
+                                {{ interviews }}
+                            </strong>
 
-                            <span
-                                class="pipeline-dot"
-                                style="background:#2563eb"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Applied
+                            <span>
+                                Interviews
                             </span>
 
                         </div>
 
-                        <span class="pipeline-count">
-                            {{ applied }}
-                        </span>
-
                     </div>
 
 
+                    <div class="mini-metric">
 
-                    <!-- SCREENING -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#9333ea"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Screening
-                            </span>
-
-                        </div>
-
-                        <span class="pipeline-count">
-                            {{ screening }}
+                        <span class="mini-metric-icon">
+                            ★
                         </span>
 
-                    </div>
+                        <div>
 
+                            <strong>
+                                {{ offers }}
+                            </strong>
 
-
-                    <!-- INTERVIEW -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#16a34a"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Interview
-                            </span>
-
-                        </div>
-
-                        <span class="pipeline-count">
-                            {{ interviews }}
-                        </span>
-
-                    </div>
-
-
-
-                    <!-- OFFER -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#0f766e"
-                            ></span>
-
-                            <span class="pipeline-label">
+                            <span>
                                 Offers
                             </span>
 
                         </div>
 
-                        <span class="pipeline-count">
-                            {{ offers }}
-                        </span>
-
-                    </div>
-
-
-
-                    <!-- REJECTED -->
-
-                    <div class="pipeline-item">
-
-                        <div class="pipeline-left">
-
-                            <span
-                                class="pipeline-dot"
-                                style="background:#dc2626"
-                            ></span>
-
-                            <span class="pipeline-label">
-                                Rejected
-                            </span>
-
-                        </div>
-
-                        <span class="pipeline-count">
-                            {{ rejected }}
-                        </span>
-
                     </div>
 
 
@@ -791,77 +696,380 @@
 
             </div>
 
-
-        </section>
-
+        </div>
 
 
-        <!-- ==========================================
-             RECENT APPLICATIONS
-             ========================================== -->
+        <!-- FUNNEL -->
 
-        <section class="table-panel">
+        <div class="panel">
 
-
-            <div class="table-header">
-
+            <div class="panel-header">
 
                 <div>
 
                     <div class="panel-title">
-                        Recent Applications
+                        Career Funnel
                     </div>
 
                     <div class="panel-subtitle">
-                        Your latest tracked opportunities
+                        Your journey from opportunity to offer.
                     </div>
 
                 </div>
-
-
-                <div
-                    style="
-                    display:flex;
-                    gap:10px;
-                    "
-                >
-
-
-                    <a
-                        href="{% url 'applications' %}"
-                        class="btn btn-secondary"
-                    >
-
-                        View All
-
-                    </a>
-
-
-                    <a
-                        href="{% url 'add_job' %}"
-                        class="btn btn-primary"
-                    >
-
-                        ＋ Add Job
-
-                    </a>
-
-
-                </div>
-
 
             </div>
 
 
+            <div class="panel-body">
 
-            {% if jobs %}
+                <div class="career-funnel">
 
+
+                    <div class="funnel-step">
+
+                        <div class="funnel-number">
+                            {{ total_jobs }}
+                        </div>
+
+                        <div class="funnel-info">
+
+                            <strong>
+                                Opportunities
+                            </strong>
+
+                            <span>
+                                Tracked
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="funnel-arrow">
+                        ↓
+                    </div>
+
+
+                    <div class="funnel-step">
+
+                        <div class="funnel-number">
+                            {{ applied }}
+                        </div>
+
+                        <div class="funnel-info">
+
+                            <strong>
+                                Applications
+                            </strong>
+
+                            <span>
+                                Submitted
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="funnel-arrow">
+                        ↓
+                    </div>
+
+
+                    <div class="funnel-step">
+
+                        <div class="funnel-number">
+                            {{ interviews }}
+                        </div>
+
+                        <div class="funnel-info">
+
+                            <strong>
+                                Interviews
+                            </strong>
+
+                            <span>
+                                Reached
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="funnel-arrow">
+                        ↓
+                    </div>
+
+
+                    <div class="funnel-step offer-step">
+
+                        <div class="funnel-number">
+                            {{ offers }}
+                        </div>
+
+                        <div class="funnel-info">
+
+                            <strong>
+                                Offers
+                            </strong>
+
+                            <span>
+                                Received
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ==================================================
+         APPLICATION PIPELINE SUMMARY
+         ================================================== -->
+
+    <section class="panel dashboard-pipeline-panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    Pipeline Overview
+                </div>
+
+                <div class="panel-subtitle">
+                    Current status of all tracked opportunities.
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'pipeline' %}"
+                class="btn btn-secondary"
+            >
+                Open Pipeline
+            </a>
+
+        </div>
+
+
+        <div class="panel-body">
+
+            <div class="pipeline-overview-grid">
+
+
+                <a
+                    href="{% url 'applications' %}?status=saved"
+                    class="pipeline-overview-card"
+                >
+
+                    <span class="pipeline-overview-icon saved">
+                        ★
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ saved }}
+                        </strong>
+
+                        <span>
+                            Saved
+                        </span>
+
+                    </div>
+
+                </a>
+
+
+                <a
+                    href="{% url 'applications' %}?status=applied"
+                    class="pipeline-overview-card"
+                >
+
+                    <span class="pipeline-overview-icon applied">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ applied }}
+                        </strong>
+
+                        <span>
+                            Applied
+                        </span>
+
+                    </div>
+
+                </a>
+
+
+                <a
+                    href="{% url 'applications' %}?status=screening"
+                    class="pipeline-overview-card"
+                >
+
+                    <span class="pipeline-overview-icon screening">
+                        ◷
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ screening }}
+                        </strong>
+
+                        <span>
+                            Screening
+                        </span>
+
+                    </div>
+
+                </a>
+
+
+                <a
+                    href="{% url 'applications' %}?status=interview"
+                    class="pipeline-overview-card"
+                >
+
+                    <span class="pipeline-overview-icon interview">
+                        ◆
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ interviews }}
+                        </strong>
+
+                        <span>
+                            Interviews
+                        </span>
+
+                    </div>
+
+                </a>
+
+
+                <a
+                    href="{% url 'applications' %}?status=offer"
+                    class="pipeline-overview-card"
+                >
+
+                    <span class="pipeline-overview-icon offer">
+                        ★
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ offers }}
+                        </strong>
+
+                        <span>
+                            Offers
+                        </span>
+
+                    </div>
+
+                </a>
+
+
+                <a
+                    href="{% url 'applications' %}?status=rejected"
+                    class="pipeline-overview-card"
+                >
+
+                    <span class="pipeline-overview-icon rejected">
+                        ×
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            {{ rejected }}
+                        </strong>
+
+                        <span>
+                            Rejected
+                        </span>
+
+                    </div>
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         RECENT APPLICATIONS
+         ================================================== -->
+
+    <section class="table-panel">
+
+
+        <div class="table-header">
+
+            <div>
+
+                <div class="panel-title">
+                    Recent Applications
+                </div>
+
+                <div class="panel-subtitle">
+                    Your latest tracked opportunities
+                </div>
+
+            </div>
+
+
+            <div class="table-actions">
+
+                <a
+                    href="{% url 'applications' %}"
+                    class="btn btn-secondary"
+                >
+                    View All
+                </a>
+
+                <a
+                    href="{% url 'add_job' %}"
+                    class="btn btn-primary"
+                >
+                    ＋ Add Job
+                </a>
+
+            </div>
+
+        </div>
+
+
+        {% if jobs %}
 
             <div class="table-wrapper">
 
-
                 <table class="job-table">
-
 
                     <thead>
 
@@ -894,189 +1102,140 @@
 
                     <tbody>
 
-
                     {% for job in jobs %}
 
+                        <tr>
 
-                    <tr>
+                            <td>
+
+                                <a
+                                    href="{% url 'job_detail' job.id %}"
+                                    class="table-company-link"
+                                >
+
+                                    <div class="company-name">
+                                        {{ job.company }}
+                                    </div>
+
+                                </a>
+
+                            </td>
 
 
-                        <!-- COMPANY -->
+                            <td>
 
-                        <td>
-
-                            <a
-                                href="{% url 'job_detail' job.id %}"
-                                style="
-                                text-decoration:none;
-                                color:inherit;
-                                "
-                            >
-
-                                <div class="company-name">
-                                    {{ job.company }}
+                                <div class="job-position">
+                                    {{ job.position }}
                                 </div>
 
-                            </a>
-
-                        </td>
+                            </td>
 
 
-                        <!-- POSITION -->
-
-                        <td>
-
-                            <div class="job-position">
-                                {{ job.position }}
-                            </div>
-
-                        </td>
+                            <td>
+                                {{ job.location|default:"Remote" }}
+                            </td>
 
 
-                        <!-- LOCATION -->
+                            <td>
 
-                        <td>
-
-                            {{ job.location|default:"Remote" }}
-
-                        </td>
-
-
-                        <!-- STATUS -->
-
-                        <td>
-
-                            <span
-                                class="status {{ job.status }}"
-                            >
-
-                                {{ job.get_status_display }}
-
-                            </span>
-
-                        </td>
-
-
-                        <!-- DATE -->
-
-                        <td>
-
-                            {% if job.date_applied %}
-
-                                {{ job.date_applied }}
-
-                            {% else %}
-
-                                <span
-                                    style="color:#9ca3af;"
-                                >
-                                    Not applied
+                                <span class="status {{ job.status }}">
+                                    {{ job.get_status_display }}
                                 </span>
 
-                            {% endif %}
-
-                        </td>
+                            </td>
 
 
-                    </tr>
+                            <td>
 
+                                {% if job.date_applied %}
+
+                                    {{ job.date_applied }}
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        Not applied
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
 
                     {% endfor %}
 
-
                     </tbody>
 
-
                 </table>
-
 
             </div>
 
 
-            {% else %}
-
-
-            <!-- EMPTY STATE -->
+        {% else %}
 
             <div class="empty-state">
-
 
                 <div class="empty-icon">
                     📋
                 </div>
 
-
                 <h3>
                     No applications yet
                 </h3>
 
-
                 <p>
-                    Start building your job pipeline by
-                    adding your first opportunity.
+                    Start building your job pipeline by adding
+                    your first opportunity.
                 </p>
-
-
-                <br>
-
 
                 <a
                     href="{% url 'add_job' %}"
                     class="btn btn-primary"
                 >
-
                     ＋ Add Your First Job
-
                 </a>
 
-
             </div>
 
+        {% endif %}
 
-            {% endif %}
+    </section>
 
 
-        </section>
-        <div class="quick-add-card">
+    <!-- ==================================================
+         QUICK ADD
+         ================================================== -->
 
-            <div class="quick-add-icon">
-                ＋
-            </div>
+    <div class="quick-add-card">
 
-            <div>
+        <div class="quick-add-icon">
+            ＋
+        </div>
 
-                <h3>
-                    Keep your pipeline moving
-                </h3>
+        <div class="quick-add-content">
 
-                <p>
-                    Add every opportunity you discover so
-                    nothing gets lost during your job search.
-                </p>
+            <h3>
+                Keep your pipeline moving
+            </h3>
 
-            </div>
-
-            <a
-                href="{% url 'add_job' %}"
-                class="btn btn-primary"
-            >
-                Add Opportunity
-            </a>
+            <p>
+                Add every opportunity you discover so nothing
+                gets lost during your job search.
+            </p>
 
         </div>
 
+        <a
+            href="{% url 'add_job' %}"
+            class="btn btn-primary"
+        >
+            Add Opportunity
+        </a>
 
-    </main>
+    </div>
 
 
 </div>
 
-
-<script
-    src="{% static 'js/jobflow.js' %}"
-></script>
-
-
-</body>
-
-</html>
+{% endblock %}

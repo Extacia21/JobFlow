@@ -1,0 +1,619 @@
+{% extends "base.html" %}
+
+{% block title %}Help Center | JobFlow{% endblock %}
+
+{% block page_heading %}
+Help Center
+{% endblock %}
+
+{% block page_description %}
+Learn how to get the most out of JobFlow.
+{% endblock %}
+
+{% block topbar_actions %}
+
+<a href="{% url 'add_job' %}" class="btn btn-primary">
+    <span>＋</span>
+    Add Job
+</a>
+
+<div class="profile">
+
+<div class="profile-avatar">
+    U
+</div>
+
+<div>
+    <div class="profile-name">
+        Job Seeker
+    </div>
+
+    <div class="profile-role">
+        JobFlow User
+    </div>
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="page-container help-page">
+
+<!-- =========================================
+     HELP HERO
+========================================== -->
+
+<section class="help-hero">
+
+    <div class="help-hero-content">
+
+        <div class="help-hero-copy">
+
+            <span class="eyebrow">
+                JOBFLOW SUPPORT
+            </span>
+
+            <h2>
+                How can we help?
+            </h2>
+
+            <p>
+                Everything you need to organize applications,
+                manage your pipeline and make smarter decisions
+                throughout your job search.
+            </p>
+
+        </div>
+
+        <div class="help-hero-icon">
+            ?
+        </div>
+
+    </div>
+
+
+    <!-- HELP SEARCH -->
+
+    <div class="help-search">
+
+        <span class="help-search-icon">
+            ⌕
+        </span>
+
+        <input
+            type="search"
+            id="helpSearch"
+            placeholder="Search help topics..."
+            autocomplete="off"
+        >
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     QUICK START
+========================================== -->
+
+<section class="help-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="eyebrow">
+                GETTING STARTED
+            </span>
+
+            <h2>
+                Start using JobFlow
+            </h2>
+
+            <p>
+                Follow these simple steps to build an effective
+                job search workflow.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="help-steps">
+
+
+        <div class="help-step">
+
+            <div class="help-step-number">
+                01
+            </div>
+
+            <div>
+
+                <h3>
+                    Add your opportunities
+                </h3>
+
+                <p>
+                    Record the jobs you are interested in,
+                    including the company, position, salary
+                    and application link.
+                </p>
+
+                <a href="{% url 'add_job' %}" class="help-link">
+                    Add a job →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="help-step">
+
+            <div class="help-step-number">
+                02
+            </div>
+
+            <div>
+
+                <h3>
+                    Manage your pipeline
+                </h3>
+
+                <p>
+                    Move opportunities through Saved, Applied,
+                    Screening, Interview, Offer and Rejected.
+                </p>
+
+                <a href="{% url 'pipeline' %}" class="help-link">
+                    Open pipeline →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="help-step">
+
+            <div class="help-step-number">
+                03
+            </div>
+
+            <div>
+
+                <h3>
+                    Measure your performance
+                </h3>
+
+                <p>
+                    Use Analytics to understand application
+                    volume, interview rates and overall progress.
+                </p>
+
+                <a href="{% url 'analytics' %}" class="help-link">
+                    View analytics →
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     HELP TOPICS
+========================================== -->
+
+<section class="help-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="eyebrow">
+                KNOWLEDGE BASE
+            </span>
+
+            <h2>
+                Explore help topics
+            </h2>
+
+            <p>
+                Quick answers to the most common JobFlow tasks.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="help-grid">
+
+
+        <a href="{% url 'add_job' %}" class="help-card">
+
+            <div class="help-icon">
+                ＋
+            </div>
+
+            <div class="help-card-content">
+
+                <h3>
+                    Adding a Job
+                </h3>
+
+                <p>
+                    Learn how to add and organize new
+                    job opportunities.
+                </p>
+
+                <span class="help-card-link">
+                    Learn more →
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a href="{% url 'pipeline' %}" class="help-card">
+
+            <div class="help-icon">
+                ◫
+            </div>
+
+            <div class="help-card-content">
+
+                <h3>
+                    Using the Pipeline
+                </h3>
+
+                <p>
+                    Move opportunities through each stage
+                    of your job search.
+                </p>
+
+                <span class="help-card-link">
+                    Learn more →
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a href="{% url 'analytics' %}" class="help-card">
+
+            <div class="help-icon">
+                ↗
+            </div>
+
+            <div class="help-card-content">
+
+                <h3>
+                    Understanding Analytics
+                </h3>
+
+                <p>
+                    Track application performance,
+                    conversion rates and search activity.
+                </p>
+
+                <span class="help-card-link">
+                    Learn more →
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a href="{% url 'applications' %}?status=saved" class="help-card">
+
+            <div class="help-icon">
+                ★
+            </div>
+
+            <div class="help-card-content">
+
+                <h3>
+                    Saved Jobs
+                </h3>
+
+                <p>
+                    Keep promising opportunities organized
+                    before applying.
+                </p>
+
+                <span class="help-card-link">
+                    View saved jobs →
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a href="{% url 'applications' %}" class="help-card">
+
+            <div class="help-icon">
+                ▣
+            </div>
+
+            <div class="help-card-content">
+
+                <h3>
+                    Managing Applications
+                </h3>
+
+                <p>
+                    Search, filter and review all of your
+                    tracked opportunities in one place.
+                </p>
+
+                <span class="help-card-link">
+                    View applications →
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a href="{% url 'interviews' %}" class="help-card">
+
+            <div class="help-icon">
+                ◷
+            </div>
+
+            <div class="help-card-content">
+
+                <h3>
+                    Interviews
+                </h3>
+
+                <p>
+                    Keep track of opportunities that have
+                    progressed to the interview stage.
+                </p>
+
+                <span class="help-card-link">
+                    View interviews →
+                </span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     FAQ
+========================================== -->
+
+<section class="panel help-faq">
+
+    <div class="panel-header">
+
+        <div>
+
+            <span class="eyebrow">
+                FREQUENTLY ASKED QUESTIONS
+            </span>
+
+            <div class="panel-title">
+                Common questions
+            </div>
+
+            <div class="panel-subtitle">
+                Quick answers to help you work faster.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="faq-list">
+
+
+        <details class="faq-item">
+
+            <summary>
+                How do I add a new job?
+                <span>＋</span>
+            </summary>
+
+            <div class="faq-answer">
+
+                <p>
+                    Open <strong>Add Job</strong> from the sidebar,
+                    enter the opportunity details and save it.
+                    The job will then appear in your applications
+                    and pipeline.
+                </p>
+
+            </div>
+
+        </details>
+
+
+        <details class="faq-item">
+
+            <summary>
+                How does the pipeline work?
+                <span>＋</span>
+            </summary>
+
+            <div class="faq-answer">
+
+                <p>
+                    Your pipeline represents the journey of each
+                    opportunity. Jobs can move from Saved to Applied,
+                    Screening, Interview and Offer, while unsuccessful
+                    opportunities can be marked Rejected.
+                </p>
+
+            </div>
+
+        </details>
+
+
+        <details class="faq-item">
+
+            <summary>
+                What is the difference between Applications and Pipeline?
+                <span>＋</span>
+            </summary>
+
+            <div class="faq-answer">
+
+                <p>
+                    Applications gives you a detailed list of your
+                    opportunities, while Pipeline provides a visual
+                    board for understanding where each opportunity
+                    currently stands.
+                </p>
+
+            </div>
+
+        </details>
+
+
+        <details class="faq-item">
+
+            <summary>
+                How are my analytics calculated?
+                <span>＋</span>
+            </summary>
+
+            <div class="faq-answer">
+
+                <p>
+                    Analytics are calculated from the jobs you have
+                    recorded in JobFlow and their current pipeline
+                    statuses. As your data grows, your performance
+                    metrics become more meaningful.
+                </p>
+
+            </div>
+
+        </details>
+
+
+        <details class="faq-item">
+
+            <summary>
+                Can I edit a job after saving it?
+                <span>＋</span>
+            </summary>
+
+            <div class="faq-answer">
+
+                <p>
+                    Yes. Open the job details page and select
+                    <strong>Edit Job</strong> to update its information,
+                    notes or current status.
+                </p>
+
+            </div>
+
+        </details>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     SUPPORT CTA
+========================================== -->
+
+<section class="help-contact">
+
+    <div class="help-contact-icon">
+        ?
+    </div>
+
+    <div class="help-contact-content">
+
+        <span class="eyebrow">
+            NEED MORE HELP?
+        </span>
+
+        <h3>
+            We're building JobFlow for your career journey.
+        </h3>
+
+        <p>
+            More support resources, guides and productivity
+            features will be added as JobFlow continues to grow.
+        </p>
+
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+        Back to Dashboard
+    </a>
+
+</section>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchInput = document.getElementById("helpSearch");
+    const helpCards = document.querySelectorAll(".help-card");
+
+    if (!searchInput) {
+        return;
+    }
+
+    searchInput.addEventListener("input", function () {
+
+        const query = this.value.toLowerCase().trim();
+
+        helpCards.forEach(function (card) {
+
+            const text = card.textContent.toLowerCase();
+
+            if (!query || text.includes(query)) {
+
+                card.style.display = "";
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

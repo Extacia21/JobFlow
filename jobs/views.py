@@ -367,3 +367,103 @@ def calculate_percentage(value, total):
         return 0
 
     return round((value / total) * 100, 1)
+
+
+def analytics(request):
+
+    jobs = Job.objects.all()
+
+    total_jobs = jobs.count()
+
+    saved = jobs.filter(
+        status="saved"
+    ).count()
+
+    applied = jobs.filter(
+        status="applied"
+    ).count()
+
+    screening = jobs.filter(
+        status="screening"
+    ).count()
+
+    interviews = jobs.filter(
+        status="interview"
+    ).count()
+
+    offers = jobs.filter(
+        status="offer"
+    ).count()
+
+    rejected = jobs.filter(
+        status="rejected"
+    ).count()
+
+
+    if total_jobs:
+
+        interview_rate = round(
+            interviews / total_jobs * 100,
+            1
+        )
+
+        offer_rate = round(
+            offers / total_jobs * 100,
+            1
+        )
+
+    else:
+
+        interview_rate = 0
+        offer_rate = 0
+
+
+    return render(
+        request,
+        "jobs/analytics.html",
+        {
+            "total_jobs": total_jobs,
+            "saved": saved,
+            "applied": applied,
+            "screening": screening,
+            "interviews": interviews,
+            "offers": offers,
+            "rejected": rejected,
+            "interview_rate": interview_rate,
+            "offer_rate": offer_rate,
+        }
+    )
+
+
+def interviews(request):
+
+    interview_jobs = Job.objects.filter(
+        status="interview"
+    ).order_by(
+        "-created_at"
+    )
+
+    return render(
+        request,
+        "jobs/interviews.html",
+        {
+            "interviews": interview_jobs
+        }
+    )
+
+
+def settings(request):
+
+    return render(
+        request,
+        "jobs/settings.html"
+    )
+
+
+def help_center(request):
+
+    return render(
+        request,
+        "jobs/help_center.html"
+    )
+

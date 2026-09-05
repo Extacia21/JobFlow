@@ -34,6 +34,30 @@ urlpatterns = [
     ),
 
     path(
+        "help/",
+        views.help_center,
+        name="help_center"
+    ),
+
+    path(
+        "settings/",
+        views.settings,
+        name="settings"
+    ),
+
+    path(
+        "interviews/",
+        views.interviews,
+        name="interviews"
+    ),
+
+    path(
+        "analytics/",
+        views.analytics,
+        name="analytics"
+    ),
+
+    path(
         "jobs/<int:job_id>/status/",
         views.update_job_status,
         name="update_job_status"

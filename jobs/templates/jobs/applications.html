@@ -1,787 +1,507 @@
-{% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>JobFlow | Applications</title>
-
-    <link
-        rel="stylesheet"
-        href="{% static 'css/jobflow.css' %}"
-    >
-
-</head>
+{% extends "base.html" %}
 
 
-<body>
+{% block title %}
+    JobFlow | Applications
+{% endblock %}
 
 
-<div class="jobflow-layout">
+{% block page_heading %}
+    Applications
+{% endblock %}
 
 
-    <!-- ==========================================
-         SIDEBAR
-         ========================================== -->
-
-    <aside class="jobflow-sidebar">
+{% block page_subtitle %}
+    Track and manage every opportunity in your job search.
+{% endblock %}
 
 
-        <div class="jobflow-logo">
-            Job<span>Flow</span>
+
+{% block content %}
+
+
+<!-- ==========================================
+     APPLICATION STATISTICS
+=========================================== -->
+
+<section class="stats-grid">
+
+
+    <!-- TOTAL -->
+
+    <div class="stat-card">
+
+        <div class="stat-card-header">
+
+            <div class="stat-icon">
+                ▤
+            </div>
+
+            <span class="stat-label">
+                TOTAL APPLICATIONS
+            </span>
+
+        </div>
+
+        <div class="stat-value">
+            {{ total_jobs }}
+        </div>
+
+        <div class="stat-description">
+            All tracked opportunities
+        </div>
+
+    </div>
+
+
+
+    <!-- APPLIED -->
+
+    <div class="stat-card">
+
+        <div class="stat-card-header">
+
+            <div class="stat-icon">
+                ↗
+            </div>
+
+            <span class="stat-label">
+                APPLIED
+            </span>
+
+        </div>
+
+        <div class="stat-value">
+            {{ applied_count }}
+        </div>
+
+        <div class="stat-description">
+            Applications submitted
+        </div>
+
+    </div>
+
+
+
+    <!-- INTERVIEWS -->
+
+    <div class="stat-card">
+
+        <div class="stat-card-header">
+
+            <div class="stat-icon">
+                ◷
+            </div>
+
+            <span class="stat-label">
+                INTERVIEWS
+            </span>
+
+        </div>
+
+        <div class="stat-value">
+            {{ interview_count }}
+        </div>
+
+        <div class="stat-description">
+            Interview opportunities
+        </div>
+
+    </div>
+
+
+
+    <!-- OFFERS -->
+
+    <div class="stat-card">
+
+        <div class="stat-card-header">
+
+            <div class="stat-icon">
+                ★
+            </div>
+
+            <span class="stat-label">
+                OFFERS
+            </span>
+
+        </div>
+
+        <div class="stat-value">
+            {{ offer_count }}
+        </div>
+
+        <div class="stat-description">
+            Offers received
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ==========================================
+     APPLICATIONS TABLE
+=========================================== -->
+
+<section class="content-panel">
+
+
+    <!-- PANEL HEADER -->
+
+    <div class="panel-header">
+
+
+        <div>
+
+            <h2 class="panel-title">
+                All Applications
+            </h2>
+
+            <p class="panel-subtitle">
+                Search, filter and manage your job opportunities.
+            </p>
+
         </div>
 
 
-        <div class="sidebar-section">
+        <a
+            href="{% url 'add_job' %}"
+            class="btn btn-primary"
+        >
+            ＋ Add Job
+        </a>
 
 
-            <div class="sidebar-title">
-                Workspace
-            </div>
+    </div>
 
 
-            <a
-                href="{% url 'dashboard' %}"
-                class="sidebar-link"
+
+    <!-- SEARCH / FILTER -->
+
+    <form
+        method="GET"
+        class="applications-toolbar"
+    >
+
+
+        <div class="search-box">
+
+            <span class="search-icon">
+                ⌕
+            </span>
+
+            <input
+                type="text"
+                name="q"
+                value="{{ search_query }}"
+                placeholder="Search company, position or location..."
+                aria-label="Search applications"
             >
 
-                <span class="sidebar-icon">
-                    ⌂
-                </span>
+        </div>
 
-                <span>
-                    Dashboard
-                </span>
 
-            </a>
 
+        <div class="filter-box">
+
+            <select
+                name="status"
+                aria-label="Filter applications by status"
+            >
+
+                <option value="">
+                    All Statuses
+                </option>
+
+                {% for value, label in status_choices %}
+
+                    <option
+                        value="{{ value }}"
+                        {% if selected_status == value %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ label }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+
+        <button
+            type="submit"
+            class="btn btn-secondary"
+        >
+            Filter
+        </button>
+
+
+
+        {% if search_query or selected_status %}
 
             <a
                 href="{% url 'applications' %}"
-                class="sidebar-link active"
+                class="btn btn-ghost"
             >
-
-                <span class="sidebar-icon">
-                    ▣
-                </span>
-
-                <span>
-                    Applications
-                </span>
-
+                Clear
             </a>
 
+        {% endif %}
 
-            <a
-                href="#"
-                class="sidebar-link"
-            >
 
-                <span class="sidebar-icon">
-                    ◷
-                </span>
+    </form>
 
-                <span>
-                    Interviews
-                </span>
 
-            </a>
 
+    <!-- TABLE -->
 
-            <a
-                href="#"
-                class="sidebar-link"
-            >
+    {% if jobs %}
 
-                <span class="sidebar-icon">
-                    ↗
-                </span>
 
-                <span>
-                    Analytics
-                </span>
+        <div class="table-wrapper">
 
-            </a>
+            <table class="jobs-table">
 
 
-        </div>
-
-
-        <!-- MANAGEMENT -->
-
-        <div class="sidebar-section">
-
-
-            <div class="sidebar-title">
-                Management
-            </div>
-
-
-            <a
-                href="{% url 'add_job' %}"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ＋
-                </span>
-
-                <span>
-                    Add Job
-                </span>
-
-            </a>
-
-
-            <a
-                href="{% url 'applications' %}?status=saved"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ★
-                </span>
-
-                <span>
-                    Saved Jobs
-                </span>
-
-            </a>
-
-
-        </div>
-
-
-        <div class="sidebar-bottom">
-
-
-            <a
-                href="#"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ⚙
-                </span>
-
-                <span>
-                    Settings
-                </span>
-
-            </a>
-
-
-            <a
-                href="#"
-                class="sidebar-link"
-            >
-
-                <span class="sidebar-icon">
-                    ?
-                </span>
-
-                <span>
-                    Help Center
-                </span>
-
-            </a>
-
-
-        </div>
-
-
-    </aside>
-
-
-
-    <!-- ==========================================
-         MAIN
-         ========================================== -->
-
-    <main class="jobflow-main">
-
-
-        <!-- ==========================================
-             TOP BAR
-             ========================================== -->
-
-        <div class="jobflow-topbar">
-
-
-            <div class="page-title">
-
-                <h1>
-                    Applications
-                </h1>
-
-                <p>
-                    Manage and track every opportunity in your job search.
-                </p>
-
-            </div>
-
-
-            <div class="topbar-actions">
-
-
-                <button
-                    class="icon-button"
-                    title="Notifications"
-                >
-                    🔔
-                </button>
-
-
-                <div class="profile">
-
-                    <div class="profile-avatar">
-                        U
-                    </div>
-
-
-                    <div>
-
-                        <div class="profile-name">
-                            Job Seeker
-                        </div>
-
-                        <div class="profile-role">
-                            JobFlow User
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <a
-                    href="{% url 'add_job' %}"
-                    class="btn btn-primary"
-                >
-
-                    ＋ Add Job
-
-                </a>
-
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- ==========================================
-             STATISTICS
-             ========================================== -->
-
-        <section class="stats-grid">
-
-
-            <div class="stat-card">
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        TOTAL
-                    </span>
-
-                    <div class="stat-icon primary">
-                        ▣
-                    </div>
-
-                </div>
-
-                <div class="stat-number">
-                    {{ total_jobs }}
-                </div>
-
-                <div class="stat-footer">
-                    All opportunities
-                </div>
-
-            </div>
-
-
-
-            <div class="stat-card">
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        APPLIED
-                    </span>
-
-                    <div class="stat-icon primary">
-                        ↗
-                    </div>
-
-                </div>
-
-                <div class="stat-number">
-                    {{ applied_count }}
-                </div>
-
-                <div class="stat-footer">
-                    Applications submitted
-                </div>
-
-            </div>
-
-
-
-            <div class="stat-card">
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        INTERVIEWS
-                    </span>
-
-                    <div class="stat-icon success">
-                        ◷
-                    </div>
-
-                </div>
-
-                <div class="stat-number">
-                    {{ interview_count }}
-                </div>
-
-                <div class="stat-footer">
-                    Active interviews
-                </div>
-
-            </div>
-
-
-
-            <div class="stat-card">
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        OFFERS
-                    </span>
-
-                    <div class="stat-icon warning">
-                        ★
-                    </div>
-
-                </div>
-
-                <div class="stat-number">
-                    {{ offer_count }}
-                </div>
-
-                <div class="stat-footer">
-                    Successful opportunities
-                </div>
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- ==========================================
-             SEARCH + FILTER
-             ========================================== -->
-
-        <section class="table-panel">
-
-
-            <div class="table-header">
-
-
-                <div>
-
-                    <div class="panel-title">
-                        Job Applications
-                    </div>
-
-                    <div class="panel-subtitle">
-                        Search, filter and manage your opportunities.
-                    </div>
-
-                </div>
-
-
-                <a
-                    href="{% url 'add_job' %}"
-                    class="btn btn-primary"
-                >
-
-                    ＋ Add Job
-
-                </a>
-
-
-            </div>
-
-
-
-            <!-- SEARCH -->
-
-            <form
-                method="GET"
-                class="application-toolbar"
-            >
-
-
-                <div class="search-box">
-
-                    <span class="search-icon">
-                        ⌕
-                    </span>
-
-                    <input
-                        type="text"
-                        name="search"
-                        value="{{ search_query }}"
-                        placeholder="Search company, position or location..."
-                    >
-
-                </div>
-
-
-
-                <!-- STATUS -->
-
-                <select
-                    name="status"
-                    class="status-filter"
-                >
-
-                    <option value="">
-                        All Statuses
-                    </option>
-
-
-                    {% for value, label in status_choices %}
-
-                        <option
-                            value="{{ value }}"
-                            {% if selected_status == value %}
-                                selected
-                            {% endif %}
-                        >
-
-                            {{ label }}
-
-                        </option>
-
-                    {% endfor %}
-
-                </select>
-
-
-
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
-
-                    Filter
-
-                </button>
-
-
-                {% if search_query or selected_status %}
-
-                    <a
-                        href="{% url 'applications' %}"
-                        class="btn btn-secondary"
-                    >
-
-                        Clear
-
-                    </a>
-
-                {% endif %}
-
-
-            </form>
-
-
-
-            <!-- RESULTS -->
-
-            {% if jobs %}
-
-
-            <div class="table-wrapper">
-
-
-                <table class="job-table">
-
-
-                    <thead>
+                <thead>
 
                     <tr>
 
                         <th>
-                            Company
+                            COMPANY
                         </th>
 
                         <th>
-                            Position
+                            POSITION
                         </th>
 
                         <th>
-                            Location
+                            LOCATION
                         </th>
 
                         <th>
-                            Salary
+                            SALARY
                         </th>
 
                         <th>
-                            Status
+                            STATUS
                         </th>
 
                         <th>
-                            Date Applied
+                            DATE APPLIED
                         </th>
 
                         <th>
-                            Action
+                            ACTION
                         </th>
 
                     </tr>
 
-                    </thead>
+                </thead>
 
 
-                    <tbody>
+
+                <tbody>
 
 
                     {% for job in jobs %}
 
+                        <tr>
 
-                    <tr>
 
+                            <!-- COMPANY -->
 
-                        <!-- COMPANY -->
+                            <td>
 
-                        <td>
+                                <div class="company-cell">
 
-                            <a
-                                href="{% url 'job_detail' job.id %}"
-                                class="company-link"
-                            >
+                                    <div class="company-avatar">
+                                        {{ job.company|first|upper }}
+                                    </div>
 
-                                <div class="company-name">
-                                    {{ job.company }}
+                                    <span class="company-name">
+                                        {{ job.company }}
+                                    </span>
+
                                 </div>
 
-                            </a>
-
-                        </td>
+                            </td>
 
 
-                        <!-- POSITION -->
 
-                        <td>
+                            <!-- POSITION -->
 
-                            <div class="job-position">
-                                {{ job.position }}
-                            </div>
+                            <td>
 
-                        </td>
+                                <div class="position-cell">
 
+                                    <span class="position-name">
+                                        {{ job.position }}
+                                    </span>
 
-                        <!-- LOCATION -->
+                                </div>
 
-                        <td>
-
-                            {{ job.location|default:"Remote" }}
-
-                        </td>
+                            </td>
 
 
-                        <!-- SALARY -->
 
-                        <td>
+                            <!-- LOCATION -->
 
-                            {% if job.salary %}
+                            <td>
 
-                                {{ job.salary }}
-
-                            {% else %}
-
-                                <span class="muted-text">
-                                    Not specified
+                                <span class="table-muted">
+                                    {{ job.location|default:"—" }}
                                 </span>
 
-                            {% endif %}
-
-                        </td>
+                            </td>
 
 
-                        <!-- STATUS -->
 
-                        <td>
+                            <!-- SALARY -->
 
-                            <span
-                                class="status {{ job.status }}"
-                            >
+                            <td>
 
-                                {{ job.get_status_display }}
-
-                            </span>
-
-                        </td>
-
-
-                        <!-- DATE -->
-
-                        <td>
-
-                            {% if job.date_applied %}
-
-                                {{ job.date_applied }}
-
-                            {% else %}
-
-                                <span class="muted-text">
-                                    —
+                                <span class="table-muted">
+                                    {{ job.salary|default:"—" }}
                                 </span>
 
-                            {% endif %}
-
-                        </td>
+                            </td>
 
 
-                        <!-- ACTION -->
 
-                        <td>
+                            <!-- STATUS -->
 
-                            <div class="table-actions">
+                            <td>
 
-                                <a
-                                    href="{% url 'job_detail' job.id %}"
-                                    class="table-action"
+                                <span
+                                    class="status-badge status-{{ job.status }}"
                                 >
-                                    View
-                                </a>
+                                    {{ job.get_status_display }}
+                                </span>
 
-                                <a
-                                    href="{% url 'edit_job' job.id %}"
-                                    class="table-action edit"
-                                >
-                                    Edit
-                                </a>
-
-                            </div>
-
-                        </td>
+                            </td>
 
 
-                    </tr>
 
+                            <!-- DATE -->
+
+                            <td>
+
+                                <span class="table-muted">
+
+                                    {% if job.date_applied %}
+                                        {{ job.date_applied|date:"d M Y" }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <a
+                                        href="{% url 'job_detail' job.id %}"
+                                        class="table-action"
+                                        title="View job"
+                                    >
+                                        View
+                                    </a>
+
+                                    <a
+                                        href="{% url 'edit_job' job.id %}"
+                                        class="table-action"
+                                        title="Edit job"
+                                    >
+                                        Edit
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+
+                        </tr>
 
                     {% endfor %}
 
 
-                    </tbody>
+                </tbody>
 
 
-                </table>
+            </table>
+
+        </div>
 
 
+    {% else %}
+
+
+        <!-- EMPTY STATE -->
+
+        <div class="empty-state">
+
+
+            <div class="empty-state-icon">
+                ▤
             </div>
 
 
-            {% else %}
+            <h3>
+                No applications found
+            </h3>
 
 
-            <!-- EMPTY -->
-
-            <div class="empty-state">
-
-
-                <div class="empty-icon">
-                    📋
-                </div>
-
-
-                <h3>
-                    No applications found
-                </h3>
-
+            <p>
 
                 {% if search_query or selected_status %}
 
-                    <p>
-                        Try changing your search or filter.
-                    </p>
-
-
-                    <br>
-
-
-                    <a
-                        href="{% url 'applications' %}"
-                        class="btn btn-secondary"
-                    >
-
-                        Clear Filters
-
-                    </a>
+                    Try adjusting your search or filters.
 
                 {% else %}
 
-                    <p>
-                        Start building your job pipeline
-                        by adding your first opportunity.
-                    </p>
-
-
-                    <br>
-
-
-                    <a
-                        href="{% url 'add_job' %}"
-                        class="btn btn-primary"
-                    >
-
-                        ＋ Add Your First Job
-
-                    </a>
+                    Start building your job pipeline by adding your first opportunity.
 
                 {% endif %}
 
+            </p>
 
-            </div>
 
+            {% if not search_query and not selected_status %}
+
+                <a
+                    href="{% url 'add_job' %}"
+                    class="btn btn-primary"
+                >
+                    ＋ Add Your First Job
+                </a>
 
             {% endif %}
 
 
-        </section>
+        </div>
 
 
-    </main>
+    {% endif %}
 
 
-</div>
+</section>
 
 
-<script
-    src="{% static 'js/jobflow.js' %}"
-></script>
-
-
-</body>
-
-</html>
+{% endblock %}

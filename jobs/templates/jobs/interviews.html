@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}
+Interviews
+{% endblock %}
+
+
+{% block content %}
+
+<div class="jobflow-topbar">
+
+    <div class="page-title">
+
+        <h1>
+            Interviews
+        </h1>
+
+        <p>
+            Keep track of upcoming and completed interviews.
+        </p>
+
+    </div>
+
+
+    <div class="topbar-actions">
+
+        <a
+            href="{% url 'add_job' %}"
+            class="btn btn-primary"
+        >
+            ＋ Add Job
+        </a>
+
+    </div>
+
+</div>
+
+
+<section class="interview-page">
+
+
+    {% if interviews %}
+
+        {% for job in interviews %}
+
+        <div class="interview-card">
+
+            <div class="interview-company">
+
+                <div class="company-avatar">
+                    {{ job.company|first|upper }}
+                </div>
+
+                <div>
+
+                    <h3>
+                        {{ job.position }}
+                    </h3>
+
+                    <p>
+                        {{ job.company }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="interview-status">
+
+                <span class="status interview">
+                    Interview
+                </span>
+
+                {% if job.date_applied %}
+                    <small>
+                        Applied {{ job.date_applied }}
+                    </small>
+                {% endif %}
+
+            </div>
+
+
+            <a
+                href="{% url 'job_detail' job.id %}"
+                class="btn btn-secondary"
+            >
+                View Job
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                ◷
+            </div>
+
+            <h3>
+                No interviews yet
+            </h3>
+
+            <p>
+                Jobs moved to the Interview stage will
+                appear here.
+            </p>
+
+            <a
+                href="{% url 'pipeline' %}"
+                class="btn btn-primary"
+            >
+                View Pipeline
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
